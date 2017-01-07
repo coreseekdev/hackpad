@@ -17,7 +17,7 @@
 MYSQL="mysql"
 DATABASE="hackpad"
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=123
 
 PROMPT=true
 
