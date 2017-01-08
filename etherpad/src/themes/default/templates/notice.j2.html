@@ -1,0 +1,26 @@
+{% import "ui.j2.html" as ui with context %}
+{{ helpers.includeJQuery() | clear }}
+{{ helpers.includeJs("modals.js") | clear }}
+{{ helpers.includeJs("jquery.validate.js") | clear }}
+{{ helpers.includeJs("jquery.placeholder.js") | clear }}
+{{ helpers.includeCss("base.less") | clear }}
+{{ helpers.includeCss("home.less") | clear }}
+{{ helpers.addToHead("<meta content='hackpad.com' name='title' />") | clear }}
+{{ helpers.addToHead("<meta content='Real-time collaborative wiki' name='description' />") | clear }}
+{{ helpers.setRobotsPolicy({'index': False}) | clear }}
+
+<script type="text/javascript" nonce="{{ helpers.cspNonce() }}">
+$(document).ready(function(){
+  modals.showModal("#confirmation-dialog", 0);
+  $("#modaloverlay").hide();
+});
+</script>
+
+<div id="confirmation-dialog" class="modaldialog">
+  <div class="modaldialog-inner" style="min-height:100px">
+    {{- content }}
+  </div>
+</div>
+
+<div id="spacer" style="height:500px">
+</div>

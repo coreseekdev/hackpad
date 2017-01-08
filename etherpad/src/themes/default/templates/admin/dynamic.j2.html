@@ -1,0 +1,10 @@
+{% import "admin/page.j2.html" as page with context %}
+{{ helpers.setHtmlTitle("Administration: " + title) | clear }}
+
+{% macro docBarTitle() %}
+  <td id="docbarpadtitle"><span>{{ title  }}</span></td>
+{%- endmacro %}
+
+{% macro contentArea() %}
+  <div id="editorcontainer">{{ content }}</div>
+{%- endmacro %}

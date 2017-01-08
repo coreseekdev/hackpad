@@ -1,0 +1,48 @@
+
+
+<table cellspacing="10" style="border:1px solid #ccc; padding:10px;">
+<tr>
+<th>
+Pad
+</th>
+<th>
+Sent
+</th>
+<th>
+Clicks
+</th>
+<th>
+CTR
+</th>
+<th>
+Opens
+</th>
+<th>
+Open Rate
+</th>
+</tr>
+{% for item in stats %}
+<tr>
+<td>
+  <a href="{{ item.url }}"> {{ item.title }}</a>
+</td>
+<td>
+  {{ item.sent }}
+</td>
+<td>
+  {{ item.clicks }}
+</td>
+<td>
+  <%= (Math.floor((stats[i].clicks / stats[i].sent) * 100000))/1000 %>
+</td>
+<td>
+  {{ item.opens }}
+</td>
+<td>
+  <%= (Math.floor((stats[i].opens / stats[i].sent) * 100000))/1000 %>
+</td>
+
+
+</tr>
+{% endfor %}
+</table>

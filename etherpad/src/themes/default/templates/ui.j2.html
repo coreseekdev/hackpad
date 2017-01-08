@@ -1,0 +1,57 @@
+{% macro button_attrs(options) %}
+    {{- 'id="%s" ' % options.get('id') if options.get('id') -}}
+    {{ 'data-tooltip="%s" ' % options.get('tooltip') if options.get('tooltip') -}}
+    {{ 'role="menu" aria-haspopup="true" ' if options.get('menu') -}}
+    {{ 'disabled ' if options.get('disabled') -}}
+    {{ 'data-click="%s" ' % options.get('data-click') if options.get('data-click') -}}
+    {{ 'data-submit="%s" ' % options.get('data-submit') if options.get('data-submit') -}}
+    {{ 'data-modal="%s" ' % options.get('data-modal') if options.get('data-modal') -}}
+    {{ 'onclick="%s" ' % options.get('onclick') if options.get('onclick') -}}
+    {{ 'onsubmit="%s" ' % options.get('onsubmit') if options.get('onsubmit') -}}
+    {{ '%s ' % options.get('attrs') if options.get('attrs') -}}
+    class="hp-ui-button {{ '%s' % options.get('className') if options.get('className') }}{{ 'hp-ui-button-menu ' if options.get('menu') -}}
+    hp-ui-button-{{ options.get('type') if options.get('type') else 'primary' -}}"
+{%- endmacro %}
+
+{% macro button_body(options) %}
+    <{{ 'a' if options.get('href') else 'span' }} class="hp-ui-button-content {{ '%s' % options.get('fontIcon') if options.get('fontIcon') }}"
+    {{- ' href="%s" data-click="cancelclick" ' % options.get('href') if options.get('href') }}>
+    {%- if options.get('icon') or options.get('iconSrc') %}
+    <img class="hp-ui-button-icon {{ options.get('icon') }}"
+         {{- ' src="%s" ' % options.get('iconSrc') if options.get('iconSrc') else ' src="%s/static/img/pixel.gif" ' % helpers.cdn() -}}
+          alt="{{ _('Icon') }}" title="{{ options.get('label') }}">
+    {% endif %}
+    {{- options.get('html') if options.get('html') else options.get('label') -}}
+    </{{ 'a' if options.get('href') else 'span' }}>
+
+    {%- if options.get('menu') and options.get('menu')|length -%}
+    <img src="{{ helpers.cdn() }}/static/img/pixel.gif"
+        alt="{{ _('Arrow') }}%>" class="hp-ui-button-arrow">
+    <div class="hp-ui-button-menu-wrapper">
+      <ul class="hp-ui-button-list-ul">
+        {% for value in options.get('menu') -%}
+          {%- if value.get('label') or value.get('html') -%}
+          <li><a href="{{- value.get('href') if value.get('href') else '#' -}}" {{- 'class="%s" ' % options.get('className') if options.get('className') -}}
+              {{- 'id="%s" ' % value.get('id') if value.get('id') -}}
+              {{ ' data-click="%s" ' % value.get('data-click') if value.get('data-click') -}}
+              {{ ' onclick="%s" ' % value.get('onclick') if value.get('onclick') -}}>
+              {{- value.get('html') if value.get('html') else value.get('label') -}}
+          </a></li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro button(options) -%}
+   {{ helpers.includeJs("ui.js") | clear }}
+   {{ helpers.includeCss("ui.less") | clear }}
+   {% if options.get('menu') %}
+   <div {{ button_attrs(options) }}>{{ button_body(options) }}
+   </div>
+   {% else %}
+   <button type="{{ options.get('buttonType', 'button') }}" {{ button_attrs(options) }}>{{ button_body(options) }}
+   </button>
+   {% endif %}
+{%- endmacro %}

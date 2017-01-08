@@ -1,0 +1,22 @@
+{% import "header3.j2.html" as header with context %}
+
+{{ helpers.addBodyClass("pro-withtopbar") | clear }}
+{{ helpers.includeJs("modals.js") | clear }}
+{{ helpers.includeJs("jquery.ajaxqueue.js") | clear }}
+{{ helpers.includeJs("jquery.autocomplete.js") | clear }}
+{{ helpers.includeCss("jquery.autocomplete.less") | clear }}
+
+{{ header.topbar() }}
+<div id="padpage">
+
+  <!--div id="padtop">
+
+  </div--> <!-- /padtop -->
+
+  <div id="alertbar">
+    <div id="servermsg">
+      <h3><span id="servermsgdate"><!-- --></span></h3>
+      <a id="hidetopmsg" href="#" data-click="hideservermessage">hide</a>
+      <p id="servermsgtext"><!-- --></p>
+    </div>
+  </div>

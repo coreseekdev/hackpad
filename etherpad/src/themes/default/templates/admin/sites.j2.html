@@ -1,0 +1,35 @@
+
+
+<script type="text/javascript" nonce="{{ helpers.cspNonce() }}" src="/static/js/jquery.tablesorter.js"></script>
+<script type="text/javascript" nonce="{{ helpers.cspNonce() }}">
+$(document).ready(function()
+    {
+        $("#sitestable").tablesorter();
+    }
+);
+</script>
+
+<table id="sitestable">
+<thead>
+<tr>
+<th>Site</th>
+<th>Type</th>
+<th>Accounts</th>
+<th>Guests</th>
+<th>Pads</th>
+<th>Last Edited</th>
+</tr>
+</thead>
+
+{% for item in sites %}
+  <tr>
+    <td><a href="{{ "https://" + item.subDomain +  "." + canonicalDomain }}">{{ item.subDomain }}</a></td>
+    <td>{{ "public" if item.isPublic else "private" }}</td>
+    <td>{{ item.accountCount }}</td>
+    <td>{{ item.guestCount }}</td>
+    <td>{{ item.padCount or 0 }}</td>
+    <td>{{ item.lastEditedDate or "" }}</td>
+  </tr>
+{% endfor %}
+
+</table>
