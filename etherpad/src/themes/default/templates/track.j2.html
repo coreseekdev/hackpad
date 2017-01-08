@@ -1,4 +1,3 @@
-{{ helpers.includeJs("jquery.ba-dotimeout.min.js") | clear }}
 {% if False %}
 
 <!--
@@ -73,7 +72,7 @@ function trackPageview(optPath) {
 
 //]]>
 {%  else  %}
-<script type="text/javascript" nonce="<%= helpers.cspNonce() %>">
+<script type="text/javascript" nonce="{{ helpers.cspNonce()  }}">
 function trackEvent(){}
 function trackLinks(){}
 function trackPageview(){}

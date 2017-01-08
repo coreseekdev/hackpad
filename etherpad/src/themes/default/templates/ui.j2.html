@@ -9,7 +9,7 @@
     {{ 'onclick="%s" ' % options.get('onclick') if options.get('onclick') -}}
     {{ 'onsubmit="%s" ' % options.get('onsubmit') if options.get('onsubmit') -}}
     {{ '%s ' % options.get('attrs') if options.get('attrs') -}}
-    class="hp-ui-button {{ '%s' % options.get('className') if options.get('className') }}{{ 'hp-ui-button-menu ' if options.get('menu') -}}
+    class="hp-ui-button{{ ' %s ' % options.get('className') if options.get('className') }}{{ ' hp-ui-button-menu ' if options.get('menu') -}}
     hp-ui-button-{{ options.get('type') if options.get('type') else 'primary' -}}"
 {%- endmacro %}
 
@@ -45,8 +45,6 @@
 {%- endmacro %}
 
 {% macro button(options) -%}
-   {{ helpers.includeJs("ui.js") | clear }}
-   {{ helpers.includeCss("ui.less") | clear }}
    {% if options.get('menu') %}
    <div {{ button_attrs(options) }}>{{ button_body(options) }}
    </div>
@@ -55,3 +53,6 @@
    </button>
    {% endif %}
 {%- endmacro %}
+
+{% macro includeJs() -%}{{ helpers.includeJs("ui.js") | clear }}{%- endmacro %}
+{% macro includeCss() -%}{{ helpers.includeCss("ui.less") | clear }}{%- endmacro %}

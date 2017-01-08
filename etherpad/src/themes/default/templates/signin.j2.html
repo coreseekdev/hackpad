@@ -1,15 +1,23 @@
 {% import "ui.j2.html" as ui with context %}
-{{ helpers.includeJQuery() | clear }}
-{{ helpers.includeCss("base.less") | clear }}
-{{ helpers.includeCss("tabs.less") | clear }}
-{{ helpers.includeCss("signin.less") | clear }}
-{{ helpers.includeJs("jquery.validate.js") | clear }}
-{{ helpers.includeJs("jquery.placeholder.js") | clear }}
-{{ helpers.includeJs("tabs.js") | clear }}
-{{ helpers.includeJs("home.js") | clear }}
-{{ helpers.includeJs("modals.js") | clear }}
+
+{% macro includeJs() -%}
+    {{ helpers.includeJQuery() | clear -}}
+    {{ helpers.includeJs("jquery.validate.js") | clear -}}
+    {{ helpers.includeJs("jquery.placeholder.js") | clear -}}
+    {{ helpers.includeJs("tabs.js") | clear -}}
+    {{ helpers.includeJs("home.js") | clear -}}
+    {{ helpers.includeJs("modals.js") | clear -}}
+    {{ helpers.includeJs("cspfixes.js") | clear -}}
+{%- endmacro %}
+
+{% macro includeCss() -%}
+    {{ helpers.includeCss("base.less") | clear -}}
+    {{ helpers.includeCss("tabs.less") | clear -}}
+    {{ helpers.includeCss("signin.less") | clear -}}
+{%- endmacro %}
+
 <!--  helpers.includeJs("pad_facebook.js"); -->
-{{ helpers.includeJs("cspfixes.js") | clear }}
+
 <!--
 <% template.define('app-login-form', function() { var ejs_data=''; %>
 
@@ -37,7 +45,7 @@
 -->
 {% macro login_form() -%}
   <div id="login-form-wrapper">
-  {% if ( (asNewAccount is not defined) or asNewAccount == false) and ( (signedInAccounts is defined) and (signedInAccounts|length) )%}
+  {% if ( (asNewAccount is not defined) or asNewAccount == false) and ( (signedInAccounts is defined) and (signedInAccounts|length) ) %}
     <div class="modaldialog-body" style="font-size:16px">
       Use <b>{{ helpers.siteName()  }}</b> as:
       <br/><br/>
@@ -48,6 +56,7 @@
           <div style="font-size:11px;">{{ account.email }}</div>
           <div style="clear:both"></div>
         </div>
+      {% endfor %}
       <br/>
 
       <a style="font-size:16px" href="/ep/account/sign-in?cont={{ cont if cont is defined else request.path | encodeURIComponent -}}&amp;new=1">Sign in using another account</a>
@@ -59,8 +68,8 @@
   {{ ui.button({'type': 'custom', 'fontIcon': 'icon-x', 'data-click':'hidemodal', 'className': 'dialog-cancel-x'}) }}
   <div class="modaldialog-body">
 
-    {% errorDiv if errorDiv is defined -%}
-    {% signinNotice if signinNotice is defined -%}
+    {{ errorDiv if (errorDiv is defined) -}}
+    {{ signinNotice if (signinNotice is defined) -}}
   <!--
   <%- typeof(errorDiv) != "undefined"? errorDiv() : "" %>
   <%- typeof(signinNotice) != "undefined"? signinNotice() : "" %>
