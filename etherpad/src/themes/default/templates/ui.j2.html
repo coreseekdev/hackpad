@@ -9,7 +9,7 @@
     {{ 'onclick="%s" ' % options.get('onclick') if options.get('onclick') -}}
     {{ 'onsubmit="%s" ' % options.get('onsubmit') if options.get('onsubmit') -}}
     {{ '%s ' % options.get('attrs') if options.get('attrs') -}}
-    class="hp-ui-button{{ ' %s ' % options.get('className') if options.get('className') }}{{ ' hp-ui-button-menu ' if options.get('menu') -}}
+    class="hp-ui-button {{ ' %s ' % options.get('className') if options.get('className') }}{{ ' hp-ui-button-menu ' if options.get('menu') -}}
     hp-ui-button-{{ options.get('type') if options.get('type') else 'primary' -}}"
 {%- endmacro %}
 
@@ -21,7 +21,7 @@
          {{- ' src="%s" ' % options.get('iconSrc') if options.get('iconSrc') else ' src="%s/static/img/pixel.gif" ' % helpers.cdn() -}}
           alt="{{ _('Icon') }}" title="{{ options.get('label') }}">
     {% endif %}
-    {{- options.get('html') if options.get('html') else options.get('label') -}}
+    {{- options.get('html') if options.get('html') else options.get('label', '') -}}
     </{{ 'a' if options.get('href') else 'span' }}>
 
     {%- if options.get('menu') and options.get('menu')|length -%}

@@ -2,7 +2,7 @@ import os
 from collections import OrderedDict
 import jinja2
 from flask import Flask
-from flask import render_template, request, send_from_directory, Response
+from flask import render_template, request, send_from_directory, Response, Blueprint, jsonify, redirect
 from jinja2 import Environment, FileSystemLoader
 from flask_babel import Babel           # Flask-Babel
 import lesscpy
@@ -320,6 +320,42 @@ def page(name=None):
         name=name
     )
     return output
+
+"""
+    EtherPad(Java), which Hackpad forked from.
+    The URL of
+"""
+ep = Blueprint(
+    "etherpad", __name__, url_prefix='/ep',
+    template_folder='templates', # registers airflow/plugins/templates as a Jinja template folder
+    static_folder='static',
+    static_url_path='/static/test_plugin')
+
+
+@ep.route('/account/login-or-signup', methods=['POST'])
+def login_or_signup():
+    # read from a html FORM post.
+    # email=admin%40local.com&xsrf=e5298ce5519fdaef
+    # {"signup":false} if .....
+    res_data = {
+        "signup": False
+    }
+    # ep/account/login-or-signup
+    return jsonify(res_data)
+
+@ep.route('/account/signin', methods=['POST'])
+def account_signin():
+    # xsrf=adbb82dd8935498b&email=admin%40local.com&password=123456&rememberMe=1&cont=http%3A%2F%2Flocalhost%3A9000%2F&name=
+    # login ok
+    res_data = {
+        "success": True,
+        "cont": '/'
+    }
+    # ep/account/login-or-signup
+    return jsonify(res_data)
+
+# register blueprint
+app.register_blueprint(ep)
 
 
 if __name__ == '__main__':
