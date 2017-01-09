@@ -1,0 +1,80 @@
+{% import "ui.j2.html" as ui with context %}
+
+{% macro includeJs() -%}
+    {{- helpers.includeJs("imgshrink.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_common.js") | clear }}
+    {{- helpers.includeJs("ace2/skiplist.js") | clear }}
+    {{- helpers.includeJs("ace2/virtual_lines.js") | clear }}
+    {{- helpers.includeJs("ace2/easysync2.js") | clear }}
+    {{- helpers.includeJs("ace2/cssmanager.js") | clear }}
+    {{- helpers.includeJs("ace2/colorutils.js") | clear }}
+    {{- helpers.includeJs("ace2/undomodule.js") | clear }}
+    {{- helpers.includeJs("ace2/contentcollector.js") | clear }}
+    {{- helpers.includeJs("ace2/changesettracker.js") | clear }}
+    {{- helpers.includeJs("ace2/linestylefilter.js") | clear }}
+
+    {{- helpers.includeJs("ace2/domline.js") | clear }}
+    {{- helpers.includeJs("ace2/embedly.js") | clear }}
+    {{- helpers.includeJs("ace2/ace.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_observer.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_toc.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_line_annotator.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_util.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_carets.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_keystrokes.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_mouse.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_media.js") | clear }}
+    {{- helpers.includeJs("ace2/embed.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_selection.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_lists.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_autolink.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_code.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_tables.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_authors.js") | clear }}
+    {{- helpers.includeJs("ace2/ace_legacy.js") | clear }}
+{%- endmacro %}
+
+{% macro includeCss() -%}
+    {{- helpers.includeCss("ace2/editor.less") | clear }}
+    {{- helpers.includeCss("ace2/syntax.less") | clear }}
+    {{- helpers.includeCss("ace2/inner.less") | clear }}
+    {{- helpers.includeCss("jquery.contextMenu2.css") | clear }}
+    <style type="text/css" title="dynamicsyntax"></style>
+{%- endmacro %}
+
+{% macro ace() -%}
+<div id="editor" class="syntax notranslate" autocorrect="off" autocomplete="off">
+  &nbsp;
+</div>
+<div id="non-editor">
+<div id="sidediv"><!-- --></div>
+<div id="overlaysdiv"><!-- --></div>
+{{- ui.button({'id': 'hp-editor-lang', 'menu':  [
+    {label: 'txt'},
+    {label: 'html'},
+    {label: 'coffee'},
+    {label: 'java'},
+    {label: 'rb'},
+    {label: 'c'},
+    {label: 'c++'},
+    {label: 'js'},
+    {label: 'py'}
+  ]} ) -}}
+{{- ui.button({'id': 'hp-editor-headings', 'menu':  [
+    {id: 'hp-editor-headings-1', label: N_('Heading 1')},
+    {id: 'hp-editor-headings-2', label: N_('Heading 2')},
+    {id: 'hp-editor-headings-3', label: N_('Heading 3')},
+    {id: 'hp-editor-headings-normal', label: N_('Normal')},
+    {id: 'hp-editor-headings-link', label: N_('Link to here')}
+  ]
+}) }}
+<div id="hp-editor-selection-wrapper">
+    {{- ui.button({'id': 'hp-editor-selection-link', 'type': 'custom', 'fontIcon': 'icon-link', 'tooltip': _('Create Link') }) -}}
+    <input id="hp-editor-selection-link-url" placeholder="Enter link URL">
+    {{- ui.button({'id': 'hp-editor-selection-link-confirm', 'type': 'custom', 'fontIcon': 'icon-checkMark' }) -}}
+    {{- ui.button({'id': 'hp-editor-selection-link-delete', 'type': 'custom', 'fontIcon': 'icon-delete', 'tooltip': _('Remove Link') }) -}}
+    {{- ui.button({'id': 'hp-editor-selection-newpad', 'type': 'custom', 'fontIcon': 'icon-newpad', 'tooltip': _('Create New Hackpad') }) -}}
+    {{- ui.button({'id': 'hp-editor-selection-newpad-confirm', 'type': 'custom', 'fontIcon': 'icon-checkMark' }) -}}
+    <input id="hp-editor-selection-newpad-title" placeholder="Enter title">
+</div>
+{%- endmacro %}

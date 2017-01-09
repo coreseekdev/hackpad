@@ -1,0 +1,13 @@
+{% import "ui.j2.html" as ui with context %}
+<%
+  template.inherit('ui.ejs');
+  helpers.includeCss("follow.less");
+%>
+
+{% macro followButton(padId, following, opt_noLabel) -%}
+   <div id="follow-container" src="/ep/pad/pad-follow-button?padId={{ padId | encodeURIComponent }}">
+    {{ ui.button({'type': 'secondary', 'className': 'padfollow ' + (' ' if (not following) else 'hidden'), 'fontIcon': 'icon-follow', 'tooltip': _('Follow'), 'label': '' if opt_noLabel else _('Follow'),}) }}
+    {{ ui.button({'type': 'secondary', 'className': 'padunfollow ' + (' ' if (following) else 'hidden'), 'fontIcon': 'icon-follow', 'tooltip': _('Following'), 'label': '' if opt_noLabel else _('Unfollow'),}) }}
+  </div>
+{%- endmacro %}
+

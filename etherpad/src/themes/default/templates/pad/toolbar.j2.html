@@ -1,0 +1,58 @@
+{% import "ui.j2.html" as ui with context %}
+{% import "pad/_follow.j2.html" as follow with context %}
+
+
+{% macro toolbarEditbar() -%}
+   <span id="toolbar" class="iphonehide">
+      {{ ui.button({'id': 'textformatbutton', 'type': 'toolbar', 'className': 'toolbar-main', 'fontIcon': 'icon-textformat', 'tooltip': _('Formatting Options') }) -}}
+        <span class="hp-ui-button-group" data-type="format">
+        {{- ui.button({'id': 'boldbutton', 'type': 'toolbar', 'fontIcon': 'icon-bold', 'tooltip': _('Bold (Command-B)') if isMac else _('Bold (Ctrl+B)') }) -}}
+        {{- ui.button({'id': 'italicsbutton', 'type': 'toolbar', 'fontIcon': 'icon-italic', 'tooltip': _('Italics (Command-I)') if isMac else _('Italics (Ctrl+I)') }) -}}
+        {{- ui.button({'id': 'underlinebutton', 'type': 'toolbar', 'fontIcon': 'icon-underline', 'tooltip': _('Underline (Command-U)') if isMac else _('Underline (Ctrl+U)') }) -}}
+        {{- ui.button({'id': 'strikebutton', 'type': 'toolbar', 'fontIcon': 'icon-strikethrough', 'tooltip': _('Strikethrough') }) -}}
+        </span>
+      {{ ui.button({'id': 'paragraphbutton', 'type': 'toolbar', 'className': 'toolbar-main', 'fontIcon': 'icon-paragraph', 'attrs': 'data-type="paragraph"', 'tooltip': _('Paragraph Options') }) -}}
+        <span class="hp-ui-button-group" data-type="paragraph">
+        {{- ui.button({'id': 'commentbutton', 'type': 'toolbar', 'fontIcon': 'icon-comment', 'tooltip': _('Comment (// at the beginning of a line)') }) -}}
+        {{- ui.button({'id': 'taskbutton', 'type': 'toolbar', 'fontIcon': 'icon-check', 'tooltip':  _('Task List (type [ ] at the beginning of a line, or Command-\\)') if isMac else _('Task List (type [ ] at the beginning of a line, or Ctrl+\\)') }) -}}
+        {{- ui.button({'id': 'listbutton', 'type': 'toolbar', 'fontIcon': 'icon-bullet', 'tooltip': _('Bulleted List (- or * at the beginning of a line)') }) -}}
+        {{- ui.button({'id': 'numberedlistbutton', 'type': 'toolbar', 'fontIcon': 'icon-number', 'tooltip': _('Numbered List (1.  at the beginning of a line)') }) -}}
+        {{- ui.button({'id': 'codebutton', 'type': 'toolbar', 'fontIcon': 'icon-code', 'tooltip': _('Code (4 spaces at the beginning of a line)') }) -}}
+        </span>
+        <span id="toolbar-indent-group" class="hp-ui-button-group">
+        {{- ui.button({'id': 'indentbutton', 'type': 'toolbar', 'fontIcon': 'icon-indent', 'tooltip': _('Indent (press Tab)') }) -}}
+        {{- ui.button({'id': 'outdentbutton', 'type': 'toolbar', 'fontIcon': 'icon-outdent', 'tooltip': _('Unindent (press Shift-Tab)') }) -}}
+        </span>
+        <span id="toolbar-attach-group" class="hp-ui-button-group" data-type="attach">
+        {{- ui.button({'id': 'insertimage', 'type': 'toolbar', 'fontIcon': 'icon-photo', 'tooltip': _('Image') }) -}}
+        {{- ui.button({'id': 'inserttable', 'type': 'toolbar', 'fontIcon': 'icon-table', 'tooltip': _('Table') }) -}}
+        <!-- {{- ui.button({'id': 'insertdropbox', 'type': 'toolbar', 'fontIcon': 'icon-dropbox', 'tooltip': _('Dropbox File') }) -}} -->
+        {{- ui.button({'id': 'attachbutton', 'type': 'toolbar', 'fontIcon': 'icon-insert', 'tooltip': _('Insert') }) -}}
+        </span>
+      <img id="toolbar-arrow"
+        src="{{ helpers.cdn() }}/static/img/editBarTriangle@2x.png">
+  </span>
+  {{- ui.button({'id': 'editbutton', 'type': 'toolbar', 'fontIcon': 'icon-edit', 'tooltip': _('Edit') }) -}}
+{%- endmacro %}
+
+{% macro toolbar() -%}
+   {{- toolbarEditbar() -}}
+   # FIXME: init list ?
+   <%
+    var menu = [
+      { href: '/ep/pad/summary/' + encodeURIComponent(localPadId), label: N_('View History'), },
+      { 'data-click': 'showembeddialog', label: N_('Embed'), },
+      { href: '/ep/pad/static/' + encodeURIComponent(localPadId), label: N_('Print'), }
+    ];
+    if (isCreator || isAdmin) {
+      menu.push({href: '#', id: 'toggle-readonly-link',
+          label: N_('Moderate') });
+      menu.push({'data-click': 'deletepad', label: N_('Delete') });
+    } else {
+      menu.push({href: '#', id: 'pad-moderator-link', label: 'Moderated By'});
+    }
+  %>
+  {{- ui.button({'id': 'settingsbutton', 'type': 'toolbar', 'menu': menu, 'fontIcon': 'icon-gear-hollow', 'tooltip': _('Pad Settings') }) -}}
+  <!-- no label -->
+  {{- follow.followButton(localPadId, following, True) -}}
+{%- endmacro %}

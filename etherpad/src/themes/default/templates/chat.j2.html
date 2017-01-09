@@ -1,0 +1,26 @@
+{% import "ui.j2.html" as ui with context %}
+{% macro includeJs() -%}{{ helpers.includeJs("jquery.textcomplete.min.js") | clear }}{%- endmacro %}
+{% macro includeCss() -%}{{ helpers.includeCss("jquery.textcomplete.css") | clear }}{%- endmacro %}
+
+{% macro chat() %}
+  <div id="padchat">
+    <div id="padchat-wrapper">
+      <header>
+        <i class="icon-comment"></i>
+        <span id="chat-room-name">{{  helpers.siteName() }} chat</span>
+        <span id="chat-num-online"></span>
+          {{- ui.button({'id': 'chat-settings', fontIcon: 'icon-gear-hollow', type: 'toolbar', className: 'hp-ui-button-menu-reverse hp-ui-button-menu-right','menu':  [
+                { id: 'chat-settings-sound', html: '<i class="icon-checkMark"></i>' + _('Sound'), }
+              ], tooltip: _('Chat Settings') } ) -}}
+      </header>
+      <div id="chat-body">
+        <div class="chatlines selected" data-room="site">
+          <a class="chatloadmore" href="#load-more">load more</a>
+          <div class="chatloadingmore">loading...</div>
+        </div>
+        <textarea id="chatentrybox"></textarea>
+      </div>
+    </div>
+    <ul id="padchat-users"></ul>
+  </div>
+{%- endmacro %}

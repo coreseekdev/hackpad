@@ -1,0 +1,14 @@
+{{ helpers.setHtmlTitle(config.customBrandingName + " Internal Server Error")  }}
+
+{% if (trace)  %}
+  <pre style="background: #fff; font-family: monospace; padding: 1em; border: 1px solid red;
+  margin: 1em; font-size: 1.25em;"><%= trace %></pre>
+{% else %}
+  <div id="errorpage" class="fpcontent">
+    <div class="error500">
+      <p>Oops!  A server error occured.  It's been logged.</p>
+      <p>Please email &lt;{{ helpers.supportEmailAddress() }}&gt; if this persists.</p>
+    </div>
+  </div>
+{% endif %}
+

@@ -1,0 +1,17 @@
+{% macro includeJs() -%}{{ helpers.includeJs("invite.js") | clear }}{%- endmacro %}
+{% macro includeCss() -%}{{ helpers.includeCss("invite.less") | clear }}{%- endmacro %}
+
+
+{% macro inviteControl (type, placeholder, idName, idValue) %}
+  <div id="friend-picker-div">
+    <form id="invite-form" method="get" action="">
+      {{- helpers.xsrfTokenElement()  }}
+      <input type="hidden" name="{{ idName }}" value="{{ idName | encodeURIComponent }}" />
+      <div id="friend-picker-wrapper">
+        <input type="text" id="friend-picker" class="{{ type }}" placeholder="{{ placeholder if placeholder else 'invite people'}}"/>
+        <div class="ac-loading-spinny"></div>
+        <label for="friend-picker"><i class="icon-invite"></i></label>
+      </div>
+    </form>
+  </div>
+{%- endmacro %}

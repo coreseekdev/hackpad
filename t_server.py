@@ -216,6 +216,14 @@ class JinjaHelper(object):
     def addBodyClass(self):
         return ''
 
+    """
+        Flask's Helper, for some logic hard to express in Template Jinja2
+    """
+    def getMenu(self):
+        """
+        :return: a menu hash used in macro button
+        """
+
 
 def clear_output(s):
     if s is None:
@@ -230,7 +238,7 @@ def encode_uri_component(s):
     else:
         return urllib.quote(s)
 
-env = Environment(extensions=['jinja2.ext.i18n'], loader=hackpad_loader)
+env = Environment(extensions=['jinja2.ext.i18n', 'jinja2.ext.do'], loader=hackpad_loader)
 env.filters['clear'] = clear_output
 env.filters['encodeURIComponent'] = encode_uri_component
 
@@ -302,6 +310,7 @@ def bare_html():
     output = env.get_template('html.j2.html').render()
     return output
 
+
 @app.route('/html/home')
 def home_html():
     """18n1
@@ -310,14 +319,22 @@ def home_html():
     output = env.get_template('main/home.j2.html').render(helpers=JinjaHelper(), request=request)
     return output
 
-@app.route('/page/')
-@app.route('/hello/<name>')
-def page(name=None):
-    """18n1
-    try convert page.ejs to Jinja2's template
+
+@app.route('/pad/<name>')
+def pad_editor(name=None):
     """
-    output = env.get_template('page.j2.html').render(
-        name=name
+    By default three type of editor.
+
+        - pad/editor_desktop.ejs
+        - pad/editor_ios.ejs
+        - pad/editor_full.ejs
+
+    """
+    bodyHtml = env.get_template('pad/editor_full.j2.html').render(
+        helpers=JinjaHelper(), request=request
+    )
+    output = env.get_template('html.j2.html').render(
+        bodyHtml = bodyHtml, helpers=JinjaHelper(), request=request
     )
     return output
 
