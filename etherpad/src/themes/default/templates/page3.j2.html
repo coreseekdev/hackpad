@@ -1,59 +1,62 @@
-<%
-  template.inherit('header3.ejs');
-  template.inherit('feedback_modal.ejs');
-  template.inherit('footer.ejs');
-  template.inherit('pro/account/_signed_out_modal.ejs');
-  template.inherit('ui.ejs');
+{% import "header3.j2.html" as header with context %}
+{% import "feedback_modal.j2.html" as feedback with context %}
+{% import "footer.j2.html" as footer with context %}
+{% import "pro/account/_signed_out_modal.j2.html" as signout with context %}
+{% import "ui.j2.html" as ui with context %}
 
-  helpers.addBodyClass(bodyClass);
-  helpers.includeCss("feedback.less");
-  helpers.includeCss("page3.less");
+{% macro includeJs() -%}
+    {{- helpers.includeJQuery() | clear }}
+    {{- helpers.includeJs("etherpad.js") | clear }}
+    {{- helpers.includeJs("jquery.placeholder.js") | clear }}
+    {{- helpers.includeJs("json2.js") | clear }}
+    {{- helpers.includeJs("modals.js") | clear }}
+    {{- helpers.includeJs("pad_modals.js") | clear }}
+{%- endmacro %}
 
-  helpers.includeJQuery();
-  helpers.includeJs("etherpad.js");
-  helpers.includeJs("jquery.placeholder.js");
-  helpers.includeJs("json2.js");
-  helpers.includeJs('modals.js');
-  helpers.includeJs("pad_modals.js");
+{% macro includeCss() -%}
+    {{- helpers.addBodyClass(bodyClass) | clear }}
+    {{- helpers.includeCss("feedback.less") | clear }}
+    {{- helpers.includeCss("page3.less") | clear }}
+{%- endmacro %}
 
-  helpers.addToHead("<meta content='hackpad.com' name='title' />");
-  helpers.addToHead("<meta content='Real-time collaborative wiki' " +
-      "name='description' />");
-  helpers.addToHead("<link href='/static/img/hackpad-logo.png' " +
-      "rel='image_src' />");
-%>
+{% block headExtra %}
+   {{- helpers.addToHead("<meta content='hackpad.com' name='title' />")  }}
+   {{- helpers.addToHead("<meta content='Real-time collaborative wiki' " +
+      "name='description' />") }}
+   {{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' " +
+      "rel='image_src' />") }}
+{%- endmacro %}
 
-<% template.define('body', function() { var ejs_data=''; %>
-  <%- template.use('topbar'); %>
+{% macro body() -%}
+  {{ header.topbar() }}
 
   <div id="padpage">
     <div id="padeditor">
-      <%- template.use('contentArea'); %>
+        {% block contentArea %}
+        {% endblock %}
     </div>
-    <%- template.use('padSidebar'); %>
+    {% block padSidebar %}
+    {% endblock %}
   </div>
-  <%- template.use('modals'); %>
+  {% block modals %}
+      <!-- template modals in editor_base, so only block ... -->
+  {% endblock %}
+  {% block padBottom %}
+  {% endblock %}
+{% endmacro %}
 
-  <%- template.use('padBottom'); %>
-<% return ejs_data; }); %>
-
-
-<% template.define('padSidebar', function() { var ejs_data=''; %>
+{% block padSidebar %}
   <aside id="padsidebar">
-    <%- template.use('sideBar'); %>
+    {% block sideBar %}
+    {% endblock %}
     <div class="clear"></div>
   </aside>
-<% return ejs_data; }); %>
+{% endblock %}
 
-
+{% block padBottom %}
 <% template.define('padBottom', function() { var ejs_data=''; %>
-  <%- template.use('footer'); %>
-  <%- template.use('signedOutDialog'); %>
-  <%- template.use('button', null, {
-    id: 'feedbackbutton',
-    type: 'action',
-    className: 'iphonehide ipadhide',
-    label: N_('feedback')
-  }); %>
-  <%- template.use('feedbackModal'); %>
-<% return ejs_data; }); %>
+  {{- footer.footer()  }}
+  {{- signout.signedOutDialog() }}
+  {{ ui.button({'id': 'tfeedbackbutton', 'type': 'action', 'className': 'iphonehide ipadhide', 'label': _('feedback') }) }}
+  {{- feedback.feedbackModal() }}
+{% endblock %}

@@ -1,3 +1,9 @@
+{% import "pad/editor_base.j2.html" as editor_base with context %}
+{% import "_invite_control.j2.html" as invite with context %}
+{% import "pad/_follow.j2.html" as follow with context %}
+{% import "pad/toolbar.j2.html" as toolbar with context %}
+{% import "ui.j2.html" as ui with context %}
+
 <%
   template.inherit('pad/editor_base.ejs');
   template.inherit('_invite_control.ejs');

@@ -213,7 +213,10 @@ class JinjaHelper(object):
     def setHtmlTitle(self):
         return ''
 
-    def addBodyClass(self):
+    def addBodyClass(self, body_class):
+        return ''
+
+    def clearFloats(self):
         return ''
 
     """
@@ -255,7 +258,13 @@ env.install_null_translations()
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    bodyHtml = env.get_template('pro/pro_home.j2.html').render(
+        helpers=JinjaHelper(), request=request
+    )
+    output = env.get_template('html.j2.html').render(
+        bodyHtml=bodyHtml, helpers=JinjaHelper(), request=request
+    )
+    return bodyHtml
 
 
 @app.route('/static/<path:filename>')
@@ -310,6 +319,13 @@ def bare_html():
     output = env.get_template('html.j2.html').render()
     return output
 
+@app.route('/html/debug')
+def debug_jinja():
+    """18n1
+    try convert page.ejs to Jinja2's template
+    """
+    output = env.get_template('debug.j2.html').render()
+    return output
 
 @app.route('/html/home')
 def home_html():

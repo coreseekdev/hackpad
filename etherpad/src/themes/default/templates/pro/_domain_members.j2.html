@@ -1,0 +1,20 @@
+{% import "_invite_control.j2.html" as invite with context %}
+
+
+{% macro domainMembersList (domainMemberCount,domainMembers,allowInvites) %}
+  <div id="domain-members" class="sidebarsection" src="/ep/domain-members-list">
+    <div class="sidebarheading" >Members ({{ domainMemberCount }})</div>
+
+    <div id="domain-members-list">
+      {% for member in domainMembers %}
+      <span class="user-item" data-userid="{% member.encryptedId%}">
+      <a href="{% member.userLink  %}" title="{% member.name %}"><img src="{% member.userPic %}" alt="{% member.name %}" /></a></span>
+      {% endfor %}
+    </div>
+
+    {% if allowInvites %}
+        {{- invite.inviteControl("invite-to-site", "invite people to contribute") }}
+    {% endif %}
+
+  </div>
+{% endmacro %}

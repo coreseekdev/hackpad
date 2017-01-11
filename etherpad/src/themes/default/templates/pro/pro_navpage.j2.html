@@ -1,0 +1,72 @@
+{% extends 'html.j2.html' %}
+
+{% from "pro/account/_signed_out_modal.j2.html" import signout with context %}
+{% import "feedback_modal.j2.html" as feedback with context %}
+{% import "ui.j2.html" as ui with context %}
+
+{% block head_css %}
+    {{- ui.includeCss() }}
+
+    {{- helpers.includeCss("jquery.contextmenu.css") | clear  }}
+    {{- helpers.includeCss("pro/pro-home.less") | clear  }}
+    {{- helpers.includeCss("pro/padlist.less") | clear  }}
+    {{- helpers.includeCss("feedback.less") | clear  }}
+    {{- helpers.includeCss("collections.less") | clear  }}
+
+    {{- helpers.includeCss("ace2/editor.less") | clear }}
+    {{- helpers.includeCss("ace2/syntax.less") | clear  }}
+    {{- helpers.includeCss("ace2/inner.less") | clear  }}
+    {{- helpers.includeCss("lightbox.less") | clear  }}
+    {{- helpers.includeMobileCss() | clear }}
+
+    {{- super() }}
+{% endblock %}
+
+{% block head_js %}
+    {{- super() }}
+    {{- helpers.includeJs("etherpad.js") | clear   }}
+    {{- helpers.includeJs("jquery.placeholder.js") | clear   }}
+    {{- helpers.includeJs("jquery-ui-1.8.20.custom.min.js") | clear   }}
+    {{- helpers.includeJs("jquery.ui.touch-punch.min.js") | clear  }}
+    {{- helpers.includeJs("ace2/embed.js") | clear  }}
+    {{- helpers.includeJs("pro/pro-padlist-client.js") | clear  }}
+    {{- helpers.includeJs("lib/jquery.contextmenu.js") | clear  }}
+    {{- helpers.includeJs("modals.js") | clear  }}
+    {{- helpers.includeJs("pad_modals.js") | clear  }}
+    {{- helpers.includeJs("jquery.tinysort.js") | clear  }}
+
+    {{- helpers.includeJs("search.js") | clear  }}
+{% endblock %}
+
+{% block headExtra %}
+    {{- helpers.addBodyClass(bodyClass) | clear  }}
+    {{- helpers.disableOffline() | clear  }}
+    {{- helpers.addToHead('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />') | clear }}
+    {{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" content="yes" />') | clear }}
+    {{- helpers.headExtra() | clear }}
+{% endblock %}
+
+{% block page_body %}
+<!-- body -->
+  <div class="fpcontent">
+    {{- ui.button({'id': 'feedbackbutton', 'type': 'action', 'className': 'iphonehide', 'label': _('feedback') }) }}
+    <div id="homeleft">
+      {% block homeleft %}
+      {% endblock %}
+    </div>
+
+    <div id="homeright">
+      {% block homeright %}
+      {% endblock %}
+    </div>
+
+    {{ helpers.clearFloats() }}
+
+    <div class="iphoneshow mobile-logout">
+      <a href="/ep/account/sign-out" class="fb-logout">Logout</a>
+    </div>
+
+  </div>
+  {{- ui.button({'id': 'hp-pad-actions', 'type': 'menu-right', 'menu': [ {'label': 'txt'}, ]}) }}
+  {{- feedback.feedbackModal() }}
+{% endblock %}

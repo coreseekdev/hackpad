@@ -1,0 +1,151 @@
+{% import "ui.j2.html" as ui with context %}
+{% import "pad/toolbar.j2.html" as toolbar with context %}
+
+{% macro includeJs() -%}
+    {{- helpers.includeJQuery() | clear }}
+    {{- helpers.includeJs("cookies.js") | clear }}
+    {{- helpers.includeJs("pad_shardajax.js") | clear }}
+    {{- helpers.includeJs("pad_topbar.js") | clear }}
+    {{- helpers.includeJs("pad_utils.js") | clear }}
+    {{- helpers.includeJs("domainlist.js") | clear }}
+    {{- helpers.includeJs("modals.js") | clear }}
+    {{- helpers.includeJs("jquery.tinysort.js") | clear }}
+    {{- helpers.includeJs("ipad.js") | clear }}
+    {{- helpers.includeJs("cspfixes.js") | clear }}
+    {{- helpers.includeJs("ui.js") | clear }}
+    {{- helpers.includeJs("ui.js") | clear }}
+{%- endmacro %}
+
+{% macro includeCss() -%}
+    {{- helpers.includeCss("base.less") | clear }}
+    {{- helpers.includeCss("header3.less") | clear }}
+    {{- helpers.includeMobileCss() | clear }}
+    {#
+        if (!request.cache.isDesktopApp &&
+          !request.userAgent.isMobile() && !request.cache.isEmbed) {
+            helpers.includeCss("ace2/desktop-web.less");
+            helpers.addBodyClass("desktop-web");
+        }
+    #}
+    {# include in macro... #}
+    {{ helpers.includeCss("view_switchers.less") | clear }}
+{%- endmacro %}
+
+{% macro headExtra() -%}
+    {{- helpers.addToHead('<meta name="viewport" content="width=device-width, ' +
+      'initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />')  }}
+    {{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" ' +
+      'content="yes" />')  }}
+{%- endmacro %}
+
+{% macro activeIfSection(sectionName) -%}
+    {{ 'active' if sectionName==selectedSection else "inactive" }}
+{%- endmacro %}
+
+{% macro topbar() -%}
+  {{- ui.button({'id': 'site-toggle', 'type': 'toolbar', 'fontIcon': 'icon-menu-web', 'tooltip': _('Workspaces'), 'data-click': 'sitebar-open' }) }}
+
+<a href="/" id="site-iphone-back" class="iphoneshow"><i class="icon-back"></i></a>
+
+<header>
+  <div id="guestbanner">
+    <div class="banner-close icon-x">
+    </div>
+    <div id="guest-banner-msg">
+      Hackpads are smart collaborative documents.
+      <a href="#join-hackpad">Join Hackpad Now</a>.
+    </div>
+  </div>
+
+  <div id="site-banner" style="background-image: url('<%- helpers.siteImage() %>'); background-position: left 0px top <%= helpers.siteBannerPosition()%>px"></div>
+  <nav id="padbar">
+    <a href="/" id="topbarBrand">
+      <span id="topbarBrandFullName" class="iphonehide ipadhide"
+          title="<%= helpers.siteName() %>">{{ helpers.siteName() }}</span>
+      <span class="iphoneshow ipadshow"><strong>h</strong></span>
+    </a>
+
+    <div id="mainbar">
+      <a href="/" data-tooltip="home" id="topbarBrand2">
+        <i class="icon-home"></i>
+      </a>
+      <a href="/" id="topbarBrand3">
+        <span id="topbarBrandFullName2" class="iphonehide ipadhide"
+            title="{{ helpers.siteName() }}%>">{{ helpers.siteName() }}</span>
+      </a>
+
+      <form id="createpadform" target="_blank" action="/ep/pad/newpad">
+        {{- ui.button({'id': 'createpadlink', 'type': 'toolbar', 'fontIcon': 'icon-newpad', 'buttonType': 'submit', 'data-click': ("showmodal" if (account is undefined or (not account)) else None ),
+          'data-modal': "#page-login-box",
+          'tooltip': _('New Hackpad') }) }}
+      </form>
+      <form id="createpadform2" action="/ep/pad/newpad">
+        <div id="createpadbox">
+          <i class="icon-search"></i>
+          <input id="createpadentry" name="title" type="text"
+              value="<%=request.params.q%>" autocomplete="off"
+              autocorrect="off" />
+          <div class="ac-loading-spinny"></div>
+        </div>
+      </form>
+      {{- toolbar.toolbar() -}}
+      {% if streamListSwitcher is defined %}
+      <div id="view-switchers" class="two-button-toggle">
+        <button class="left stream {{ activeIfSection('stream') }}"
+            data-tooltip="Latest changes"><span class="icon-stream"></span><span class="view-switchers-text">Stream</span></button><button class="right list {{ activeIfSection('home')  }}" data-tooltip="Pad List"><span class="icon-list"></span><span class="view-switchers-text">List</span></button>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+</header>
+
+<nav id="sitebar">
+  <h1 id="sitebar-heading"><a href="https://hackpad.com">hackpad</a></h1>
+  <ul id="domain-list">
+    <li class="domain-item domain-item-overflow">
+      {{- ui.button({ 'label': _('more'), 'menu': [{}] }) }}
+    </li>
+    <li class="domain-item domain-item-new">
+      <a href="/ep/new-site" id="create-space">+ new workspace</a>
+    </li>
+  </ul>
+
+  <div id="account">
+    <div id="faccountnav">
+      {% if account is defined and account %}
+        {% set profile_html = accountProfile() %}
+        {{- ui.button({ 'id': 'account-dropdown', 'type': 'custom', 'href': '/ep/profile/', 'label': (account.email if isMultiAccount else account.fullName),
+          'menu': [
+            { 'href': '/ep/profile/', 'html': profile_html, },
+            { 'href': '/ep/account/settings/', 'className': 'fb-logout',
+                'label': _('Account settings'), },
+            { 'href': '/ep/account/sign-out?switch=1', 'className': 'fb-logout',
+                'label': _('Switch accounts'), },
+            { 'href': '/ep/account/sign-out', 'className': 'fb-logout',
+                'label': _('Logout') },
+          ]}) -}}
+      {% else %}
+        <a href="#" data-modal="#page-login-box" data-click="showmodal">
+          Sign In
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if helpers.isDogfood() %}
+  {{- ui.button({'id': 'debugmenu', 'type': 'toolbar', 'className': 'hp-ui-button-menu-right', 'data-click': 'preventdefault', 'label': _('Debug'),
+    'menu': [
+      { 'id': 'enable-video', 'label': _('Live Video') },
+      { 'id': 'pause-collab', 'label': _('Pause Collab') },
+    ]}) }}
+{% endif %}
+
+{%- endmacro %}
+
+{% macro accountProfile() -%}
+  <img class="profile-pic" src="{{ userPic }}">
+  <span class="profile-name">{{ account.fullName }}</span>
+  <span class="profile-email">{{ account.email }}</span>
+  <span style="display: block; clear: both"></span>
+{% endmacro %}

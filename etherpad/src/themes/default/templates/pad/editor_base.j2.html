@@ -1,41 +1,27 @@
-<%
-  template.inherit('page3.ejs');
-  template.inherit('ace.ejs');
-  template.inherit('chat.ejs');
-  template.inherit('pad/pad_userlist.ejs');
+{% import "page3.j2.html" as page3 with context %}
+{% import "ace.j2.html" as ace with context %}
+{% import "chat.j2.html" as chat with context %}
+{% import "pad/pad_userlist.j2.html" as pad_userlist with context %}
 
-  helpers.setBodyId("padbody");
-  helpers.setHtmlTitle(pageTitle);
-
-  // tell googlebot to request ?_escaped_fragment_=
-  if (request.params['_escaped_fragment_'] != undefined) {
-    helpers.setNoJs(true);
-  } else {
-    helpers.addToHead('<meta name="fragment" content="!" />');
-  }
-
-  if (robotsNoindex) {
-    helpers.addToHead('<meta name="robots" content="noindex, noarchive" />');
-  }
-
-  if (initialTitle) {
-    helpers.addToHead('<link rel="alternate" type="text/xml+oembed" ' +
-        'href="/ep/oembed/' + encodeURIComponent(localPadId) + '" ' +
-        'title="' + helpers.escapeHtml(initialTitle) + '">');
-    helpers.addToHead('<link rel="canonical" href="/' +
-        initialTitle.replace(/[^\w\s-\.]/g, '').replace(/[\s-]+/g, '-') + '-' +
-        encodeURIComponent(localPadId) + '">');
-
-    helpers.facebookOpenGraphMetadata({title: initialTitle,
-        type: 'hackpad:pad', description: description});
-  }
-
-  helpers.includeCss("ace2/editor.less");
+{% block head_css %}
+     helpers.includeCss("ace2/editor.less");
   helpers.includeCss("ace2/syntax.less");
   helpers.includeCss("ace2/inner.less");
   helpers.includeCss("pad.less");
 
-  helpers.includeCometJs();
+      helpers.includeCss("collections.less");
+  helpers.includeCss("jquery.autocomplete.less");
+  helpers.includeCss("lightbox.less");
+  helpers.includeCss("padaccess.less");
+    {{- signin.includeCss() }}
+    {{- ui.includeCss() }}
+    {{- helpers.includeCss("home_ejs.less") | clear }}
+    {{- helpers.includeMobileCss() | clear }}
+    {{- super() }}
+{% endblock %}
+
+{% block head_js %}
+      helpers.includeCometJs();
   helpers.includeJs("collab_client.js");
   helpers.includeJs("cookies.js");
   helpers.includeJs("customSelect.jquery.js");
@@ -65,12 +51,51 @@
 
   helpers.includeDropboxChooser();
 
-  helpers.includeCss("collections.less");
-  helpers.includeCss("jquery.autocomplete.less");
-  helpers.includeCss("lightbox.less");
-  helpers.includeCss("padaccess.less");
-%>
+    {{- signin.includeJs() }}
+    {{- helpers.includeJs("common.js") | clear }}
+    {{- helpers.includeJs("modals.js") | clear }}
+    {{- helpers.includeJs("jquery.validate.js") | clear }}
+    {{- helpers.includeJs("jquery.placeholder.js") | clear }}
+    {{- helpers.includeJs("ipad.js") | clear }}
+    {{- ui.includeJs() }}
+    {{- super() }}
+{% endblock %}
 
+{% block headExtra %}
+    helpers.setBodyId("padbody");
+    helpers.setHtmlTitle(pageTitle);
+    / tell googlebot to request ?_escaped_fragment_=
+  if (request.params['_escaped_fragment_'] != undefined) {
+    helpers.setNoJs(true);
+  } else {
+    helpers.addToHead('<meta name="fragment" content="!" />');
+  }
+
+  if (robotsNoindex) {
+    helpers.addToHead('<meta name="robots" content="noindex, noarchive" />');
+  }
+
+  if (initialTitle) {
+    helpers.addToHead('<link rel="alternate" type="text/xml+oembed" ' +
+        'href="/ep/oembed/' + encodeURIComponent(localPadId) + '" ' +
+        'title="' + helpers.escapeHtml(initialTitle) + '">');
+    helpers.addToHead('<link rel="canonical" href="/' +
+        initialTitle.replace(/[^\w\s-\.]/g, '').replace(/[\s-]+/g, '-') + '-' +
+        encodeURIComponent(localPadId) + '">');
+
+    helpers.facebookOpenGraphMetadata({title: initialTitle,
+        type: 'hackpad:pad', description: description});
+  }
+
+
+    {{- helpers.addToHead("<meta content='hackpad.com' name='title' />") | clear }}
+    {{- helpers.addToHead("<meta content='Real-time collaborative wiki' name='description' />") | clear }}
+    {{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' rel='image_src' />") | clear }}
+    {{- helpers.addToHead('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />') | clear }}
+    {{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" content="yes" />') | clear }}
+    {{- helpers.addSmartAppBanner() | clear }}
+    {{- helpers.headExtra() | clear }}
+{% endblock %}
 
 <% template.define('contentArea', function() { var ejs_data=''; %>
   <%- template.use('freakoutScript'); %>
