@@ -1,6 +1,5 @@
 {% import "ui.j2.html" as ui with context %}
 
-{% macro includeJs() -%}
     {{ helpers.includeJQuery() | clear -}}
     {{ helpers.includeJs("jquery.validate.js") | clear -}}
     {{ helpers.includeJs("jquery.placeholder.js") | clear -}}
@@ -8,13 +7,10 @@
     {{ helpers.includeJs("home.js") | clear -}}
     {{ helpers.includeJs("modals.js") | clear -}}
     {{ helpers.includeJs("cspfixes.js") | clear -}}
-{%- endmacro %}
 
-{% macro includeCss() -%}
     {{ helpers.includeCss("base.less") | clear -}}
     {{ helpers.includeCss("tabs.less") | clear -}}
     {{ helpers.includeCss("signin.less") | clear -}}
-{%- endmacro %}
 
 <!--  helpers.includeJs("pad_facebook.js"); -->
 

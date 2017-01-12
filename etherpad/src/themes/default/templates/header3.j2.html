@@ -1,8 +1,5 @@
 {% import "ui.j2.html" as ui with context %}
-{% import "pad/toolbar.j2.html" as toolbar with context %}
 
-{% macro includeJs() -%}
-    {{- helpers.includeJQuery() | clear }}
     {{- helpers.includeJs("cookies.js") | clear }}
     {{- helpers.includeJs("pad_shardajax.js") | clear }}
     {{- helpers.includeJs("pad_topbar.js") | clear }}
@@ -13,9 +10,7 @@
     {{- helpers.includeJs("ipad.js") | clear }}
     {{- helpers.includeJs("cspfixes.js") | clear }}
     {{- helpers.includeJs("ui.js") | clear }}
-{%- endmacro %}
 
-{% macro includeCss() -%}
     {{- helpers.includeCss("base.less") | clear }}
     {{- helpers.includeCss("header3.less") | clear }}
     {{- helpers.includeMobileCss() | clear }}
@@ -28,7 +23,6 @@
     #}
     {# include in macro... #}
     {{ helpers.includeCss("view_switchers.less") | clear }}
-{%- endmacro %}
 
 {% macro headExtra() -%}
     {{- helpers.addToHead('<meta name="viewport" content="width=device-width, ' +
@@ -56,11 +50,11 @@
     </div>
   </div>
 
-  <div id="site-banner" style="background-image: url('<%- helpers.siteImage() %>'); background-position: left 0px top <%= helpers.siteBannerPosition()%>px"></div>
+  <div id="site-banner" style="background-image: url('{{- helpers.siteImage() }}'); background-position: left 0px top <%= helpers.siteBannerPosition()%>px"></div>
   <nav id="padbar">
     <a href="/" id="topbarBrand">
       <span id="topbarBrandFullName" class="iphonehide ipadhide"
-          title="<%= helpers.siteName() %>">{{ helpers.siteName() }}</span>
+          title="{{ helpers.siteName() }}">{{ helpers.siteName() }}</span>
       <span class="iphoneshow ipadshow"><strong>h</strong></span>
     </a>
 
@@ -82,12 +76,15 @@
         <div id="createpadbox">
           <i class="icon-search"></i>
           <input id="createpadentry" name="title" type="text"
-              value="<%=request.params.q%>" autocomplete="off"
+              value="{{ request.args.get('q', '') }}" autocomplete="off"
               autocorrect="off" />
           <div class="ac-loading-spinny"></div>
         </div>
       </form>
+      {% if editor_mode %}
+      {% import "pad/toolbar.j2.html" as toolbar with context %}
       {{- toolbar.toolbar() -}}
+      {% endif %}
       {% if streamListSwitcher is defined %}
       <div id="view-switchers" class="two-button-toggle">
         <button class="left stream {{ activeIfSection('stream') }}"

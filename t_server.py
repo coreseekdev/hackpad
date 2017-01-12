@@ -68,11 +68,12 @@ class JinjaHelper(object):
         self.js = OrderedDict()
         self.css = OrderedDict()
         self.head_meta = OrderedDict()
+        self.body_classes = []
         self.config = config
 
-    def includeJQuery(self):
-        if 'jq' in self.js:
-            return  ''
+    def includeJQuery(self, force=False):
+        if not force and 'jq' in self.js:
+            return ''
 
         self.js['jq'] = 'jq'
         s = '<!-- jquery -->'
@@ -129,7 +130,7 @@ class JinjaHelper(object):
         return 'body_id'
 
     def bodyClasses(self):
-        return ''
+        return ' '.join(self.body_classes)
 
     def addToHead(self, head_s):
         print 'add header', head_s
@@ -214,6 +215,8 @@ class JinjaHelper(object):
         return ''
 
     def addBodyClass(self, body_class):
+        if body_class not in self.body_classes:
+            self.body_classes.append(body_class)
         return ''
 
     def clearFloats(self):
@@ -227,6 +230,20 @@ class JinjaHelper(object):
         :return: a menu hash used in macro button
         """
 
+    def isHeaderVisible(self):
+        return True
+
+    def siteName(self):
+        return 'TODO: siteName'
+
+    def isDogfood(self):
+        return True
+
+    def encodeURIComponent(self, uri):
+        return uri
+
+    def siteImage(self):
+        return 'siteImage.png'
 
 def clear_output(s):
     if s is None:
@@ -258,13 +275,32 @@ env.install_null_translations()
 
 @app.route('/')
 def hello_world():
+    helper = JinjaHelper()
+
+    # header
+    def getHeaderHtml():
+        data = {
+            'localPadId': 'demo_pad',
+        }
+
+        headerHtml = env.get_template('framed/framedheader.j2.html').render(
+            helpers=helper, request=request, editor_mode=False, **data
+        )
+        return headerHtml
+
+    bodyHtml = env.get_template('framed/framedpage.j2.html').render(
+        helpers=helper, request=request,
+        headerHtml=getHeaderHtml, contentHtml=''
+    )
+    """
     bodyHtml = env.get_template('pro/pro_home.j2.html').render(
-        helpers=JinjaHelper(), request=request
+        helpers=helper, request=request
     )
+    """
     output = env.get_template('html.j2.html').render(
-        bodyHtml=bodyHtml, helpers=JinjaHelper(), request=request
+        bodyHtml=bodyHtml, helpers=helper, request=request
     )
-    return bodyHtml
+    return output
 
 
 @app.route('/static/<path:filename>')

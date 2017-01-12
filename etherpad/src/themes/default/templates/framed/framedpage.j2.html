@@ -6,20 +6,17 @@
 {{ helpers.addBodyClass("sitebar") | clear }}
 {{ helpers.addBodyClass("hasSitebar") | clear }}
 
-
-  <%- renderHeader({signedInAccounts: signedInAccounts}) %>
-
-  <%- renderGlobalProNotice() %>
-
-  <%- getContentHtml() %>
-
+  {{- headerHtml() }}
+  <!-- <%- renderGlobalProNotice() %> -->
+  {{- contentHtml }}
 </div> <!-- /padpage -->
 
 <div id="page-login-box" class="modaldialog">
-  <%- template.use('login-form'); %>
+    {{- signin.login_form()  }}
 </div>
 
-<% if (helpers.isHeaderVisible()) { %>
-  <%- template.use('footer'); %>
-<% } %>
+{% if helpers.isHeaderVisible() %}
+    {{- footer.footer() }}
+{% endif %}
+
 

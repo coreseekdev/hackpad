@@ -3,11 +3,9 @@
 {% import "ui.j2.html" as ui with context %}
 
 <!-- include js & css => helper, render JS & CSS in html.j2 -->
-{{- signin.includeCss() }}
 {{- helpers.includeCss("home_ejs.less") | clear }}
 {{- helpers.includeMobileCss() | clear }}
 
-{{- signin.includeJs() }}
 {{- helpers.includeJs("common.js") | clear }}
 {{- helpers.includeJs("modals.js") | clear }}
 {{- helpers.includeJs("jquery.validate.js") | clear }}
@@ -20,7 +18,7 @@
 {{- helpers.addToHead('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />') | clear }}
 {{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" content="yes" />') | clear }}
 {{- helpers.addSmartAppBanner() | clear }}
-{{- helpers.headExtra() | clear }}
+
 
 {{ helpers.disableOffline() | clear }}
 <div id="home">

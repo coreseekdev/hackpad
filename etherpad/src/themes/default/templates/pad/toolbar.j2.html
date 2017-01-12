@@ -38,12 +38,14 @@
 {% macro toolbar() -%}
    {{- toolbarEditbar() -}}
    # FIXME: init list ?
+    {% set menu =  [
+      { 'href': '/ep/pad/summary/' + helpers.encodeURIComponent(localPadId), 'label': _('View History'), },
+      { 'data-click': 'showembeddialog', 'label': _('Embed'), },
+      { 'href': '/ep/pad/static/' + helpers.encodeURIComponent(localPadId), 'label': _('Print'), }
+    ] %}
+    <!--
    <%
-    var menu = [
-      { href: '/ep/pad/summary/' + encodeURIComponent(localPadId), label: N_('View History'), },
-      { 'data-click': 'showembeddialog', label: N_('Embed'), },
-      { href: '/ep/pad/static/' + encodeURIComponent(localPadId), label: N_('Print'), }
-    ];
+    var menu =
     if (isCreator || isAdmin) {
       menu.push({href: '#', id: 'toggle-readonly-link',
           label: N_('Moderate') });
@@ -52,7 +54,7 @@
       menu.push({href: '#', id: 'pad-moderator-link', label: 'Moderated By'});
     }
   %>
+  -->
   {{- ui.button({'id': 'settingsbutton', 'type': 'toolbar', 'menu': menu, 'fontIcon': 'icon-gear-hollow', 'tooltip': _('Pad Settings') }) -}}
-  <!-- no label -->
   {{- follow.followButton(localPadId, following, True) -}}
 {%- endmacro %}

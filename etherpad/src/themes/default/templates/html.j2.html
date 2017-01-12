@@ -18,7 +18,7 @@
         href="/static/apple-touch-icon-144.png" />
     <script>less = { env: 'development'};</script>
     {% block head_js %}
-        {{ helpers.includeJQuery() | clear }}
+        {{ helpers.includeJQuery(True) | clear }}
     {% endblock %}
     {% block head_css %}
         {{ helpers.cssIncludes() | clear }}
@@ -28,6 +28,7 @@
     <link rel="search" type="application/opensearchdescription+xml"
         title="hackpad" href="/static/opensearch.xml" /> -->
     {% block headExtra %}
+        {{- helpers.headExtra() | clear }}
     {% endblock %}
     {{ helpers.documentDomain() | clear }}
     <script src="/static/js/less-1.4.1.min.js"></script>
