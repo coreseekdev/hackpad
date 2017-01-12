@@ -1,13 +1,16 @@
 {% extends 'pro/pro_navpage.j2.html' %}
 {% import "pro/_domain_members.j2.html" as member with context %}
 {% import "ui.j2.html" as ui with context %}
+{% import "signin.j2.html" as signin with context %}
 
 {% block head_css %}
+    {{- signin.includeCss() }}
     {{- ui.includeCss() }}
     {{- super() }}
 {% endblock %}
 
 {% block head_js %}
+    {{- helpers.includeJs("jquery.validate.js") | clear -}}
     {{- helpers.includeJs("cookies.js") | clear }}
     {{- helpers.includeJs("hints.js") | clear }}
     {{- helpers.includeJs("buttons.js") | clear }}
@@ -158,7 +161,7 @@
       </div>
       {% endif %}
     </div>
-  <% } %>
+  {% endif %}
 
   <!-- domain's collections -->
   {% if domainGroups is defined and domainGroups|length %}

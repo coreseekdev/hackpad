@@ -1,38 +1,27 @@
-{% extends 'html.j2.html' %}
 {% from "html.j2.html" import includeCss with context %}
 {% import "signin.j2.html" as signin with context %}
 {% import "ui.j2.html" as ui with context %}
 
-{% block head_css %}
-    {{- signin.includeCss() }}
-    {{- ui.includeCss() }}
-    {{- helpers.includeCss("home_ejs.less") | clear }}
-    {{- helpers.includeMobileCss() | clear }}
-    {{- super() }}
-{% endblock %}
+<!-- include js & css => helper, render JS & CSS in html.j2 -->
+{{- signin.includeCss() }}
+{{- helpers.includeCss("home_ejs.less") | clear }}
+{{- helpers.includeMobileCss() | clear }}
 
-{% block head_js %}
-    {{- signin.includeJs() }}
-    {{- helpers.includeJs("common.js") | clear }}
-    {{- helpers.includeJs("modals.js") | clear }}
-    {{- helpers.includeJs("jquery.validate.js") | clear }}
-    {{- helpers.includeJs("jquery.placeholder.js") | clear }}
-    {{- helpers.includeJs("ipad.js") | clear }}
-    {{- ui.includeJs() }}
-    {{- super() }}
-{% endblock %}
+{{- signin.includeJs() }}
+{{- helpers.includeJs("common.js") | clear }}
+{{- helpers.includeJs("modals.js") | clear }}
+{{- helpers.includeJs("jquery.validate.js") | clear }}
+{{- helpers.includeJs("jquery.placeholder.js") | clear }}
+{{- helpers.includeJs("ipad.js") | clear }}
 
-{% block headExtra %}
-    {{- helpers.addToHead("<meta content='hackpad.com' name='title' />") | clear }}
-    {{- helpers.addToHead("<meta content='Real-time collaborative wiki' name='description' />") | clear }}
-    {{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' rel='image_src' />") | clear }}
-    {{- helpers.addToHead('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />') | clear }}
-    {{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" content="yes" />') | clear }}
-    {{- helpers.addSmartAppBanner() | clear }}
-    {{- helpers.headExtra() | clear }}
-{% endblock %}
+{{- helpers.addToHead("<meta content='hackpad.com' name='title' />") | clear }}
+{{- helpers.addToHead("<meta content='Real-time collaborative wiki' name='description' />") | clear }}
+{{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' rel='image_src' />") | clear }}
+{{- helpers.addToHead('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />') | clear }}
+{{- helpers.addToHead('<meta name="apple-mobile-web-app-capable" content="yes" />') | clear }}
+{{- helpers.addSmartAppBanner() | clear }}
+{{- helpers.headExtra() | clear }}
 
-{% block page_body %}
 {{ helpers.disableOffline() | clear }}
 <div id="home">
   <div id="logo-bar"></div>
@@ -126,5 +115,3 @@
     updatePageElements();
   });
 </script>
-
-{% endblock %}

@@ -54,5 +54,5 @@
    {% endif %}
 {%- endmacro %}
 
-{% macro includeJs() -%}{{ helpers.includeJs("ui.js") | clear }}{%- endmacro %}
-{% macro includeCss() -%}{{ helpers.includeCss("ui.less") | clear }}{%- endmacro %}
+{{- helpers.includeJs("ui.js") | clear }}
+{{- helpers.includeCss("ui.less") | clear }}

@@ -332,7 +332,13 @@ def home_html():
     """18n1
     try convert page.ejs to Jinja2's template
     """
-    output = env.get_template('main/home.j2.html').render(helpers=JinjaHelper(), request=request)
+    helper = JinjaHelper()
+    bodyHtml = env.get_template('main/home.j2.html').render(
+        helpers=helper, request=request
+    )
+    output = env.get_template('html.j2.html').render(
+        bodyHtml=bodyHtml, helpers=helper, request=request
+    )
     return output
 
 
