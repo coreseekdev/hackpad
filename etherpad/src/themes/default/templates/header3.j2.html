@@ -21,6 +21,8 @@
             helpers.addBodyClass("desktop-web");
         }
     #}
+    {{ helpers.includeCss("ace2/desktop-web.less")  }}
+    {{ helpers.addBodyClass("desktop-web")  }}
     {# include in macro... #}
     {{ helpers.includeCss("view_switchers.less") | clear }}
 

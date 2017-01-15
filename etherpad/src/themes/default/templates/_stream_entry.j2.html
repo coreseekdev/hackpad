@@ -1,0 +1,71 @@
+<div class="segment-outer-wrapper {{ "pinned" if p.get("isPinned") }}" data-padid="{{ p.get("localPadId") }}" data-subdomain='{{ domain['subDomain'] if onOtherDomain }}'>
+  <div class="segment-last-edited-date">{{ p.get("lastEditedDate") }}<%=lastEditedDate ? " " + timeAgo(lastEditedDate) : "" %></div>
+  <div class='segment' data-padid='{{ p.get("localPadId") }}'>
+    <div class='segment-info' style='float:right; text-align: right; margin: 1em; position: relative; z-index: 1'>
+      {% if opts.showTaskCount %}
+        <div class="taskCount">{{ columnMeta.render('taskCount', p) }}</div>
+      {% endif %}
+    </div>
+    <!-- columnMeta actions -->
+    <div class="gear-drop icon-gear" id="pad-gear-{{ p.get("localPadId") }}"></div>
+    <div class='segment-pic'>
+      <a href='<%=picLinkUrl%>'>
+      {% if picUrl %}
+        <img class="<% if (isMultipleAuthors) { %>multiple-facepile<% } %>" src='{{ picUrl }}'/>
+      {% else %}
+        <img class="<% if (isMultipleAuthors) { %>multiple-facepile<% } %>" src='/static/img/nophoto.png'/>
+      {% endif %}
+      </a>
+    </div>
+    <div class='segment-wrapper'>
+      {% if p.get("isPinned") %}
+        <i class="icon-pin" title="Pinned" alt="Pinned pad"></i>
+      {% endif %}
+      <i class="icon-grippy"></i>
+      <div class='title'>
+        <a href='<%= onOtherDomain ? absolutePadUrl(localPadId, {}, domain.subDomain, urlTitle) : relativePadUrl(localPadId, urlTitle)%>'>
+          {{ columnMeta.render('title', p) }}
+        </a>
+      </div>
+    <!--
+      <% if (onOtherDomain) { %>
+      <div class='site-label with-ribbon'><a href="<%= absoluteUrl('/', {}, domain.subDomain) %>"><%= domain.orgName %></a></div>
+      <% } %>
+    -->
+      <div class='segment-info'>
+        <span class="segment-group-wrapper">
+        {% if p.groupInfos | length %}
+          <span class="segment-group-old">In</span>
+          {% for group in p.groupInfos[:-1] %}
+            <a class="segment-group-link" href="<%= relativeCollectionUrl(p.groupInfos[i].encryptedId) %>">
+                {{- group.get('name') }}</a><span class="segment-group-old">,</span>
+          {% endfor %}
+          {% set group = p.groupInfos[-1] %}
+            <a class="segment-group-link" href="<%= relativeCollectionUrl(p.groupInfos[i].encryptedId) %>">
+                {{ group.get('name') }}</a><span class="segment-group-old">.&nbsp;</span>
+        {% else %}
+          <span class="segment-group-link-unfiled">Unfiled</span><span class="segment-group-old">.</span>
+        {% endif %}
+        </span>
+        <span class="segment-edited-by">
+          <span> <%= authorsHTML ? "Edited by" : "Edited" %> </span>
+          <span class='authors' style=''> <%-authorsHTML%> </span>
+          <span class='lastEditedDate'> <%=lastEditedDate ? " " + timeAgo(lastEditedDate) : "" %></span>
+        </span>
+      </div>
+      <div class='segment-content'>
+        {{ diffHTML }}
+        <div class='segment-controls'>
+        {% if isGlobal %}
+          <a class='segmentReadMore' href='<%= onOtherDomain ? absolutePadUrl(localPadId, {}, domain.subDomain, urlTitle) : relativePadUrl(localPadId, urlTitle)%>'>Read more</a>
+        {% else %}
+          <a class='segmentSeeWhole' padId='<%=localPadId%>' href='#'>Show full change</a>
+          <a class='segmentSeeLess' padId='<%=localPadId%>' href='#'>Show only preview</a>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style='clear:both'></div>
+

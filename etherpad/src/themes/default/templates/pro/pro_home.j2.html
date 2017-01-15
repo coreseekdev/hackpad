@@ -3,25 +3,16 @@
 {% import "ui.j2.html" as ui with context %}
 {% import "signin.j2.html" as signin with context %}
 
-{% block head_css %}
-    {{- signin.includeCss() }}
-    {{- ui.includeCss() }}
-    {{- super() }}
-{% endblock %}
 
-{% block head_js %}
     {{- helpers.includeJs("jquery.validate.js") | clear -}}
     {{- helpers.includeJs("cookies.js") | clear }}
     {{- helpers.includeJs("hints.js") | clear }}
     {{- helpers.includeJs("buttons.js") | clear }}
-    {{- ui.includeJs() }}
-    {{- super() }}
-{% endblock %}
 
-{% block headExtra %}
     {{- helpers.addSmartAppBanner() | clear }}
     {{- helpers.headExtra() | clear }}
 
+{% block headExtra %}
     <script type="text/javascript" nonce="{{ helpers.cspNonce() }}">
     //<![CDATA[
       $(document).ready(function() {
@@ -32,7 +23,7 @@
       });
     //]]>
     </script>
-
+    {{ super() }}
 {% endblock %}
 
 {% block homeleft %}

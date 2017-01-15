@@ -4,59 +4,41 @@
 {% import "pro/account/_signed_out_modal.j2.html" as signout with context %}
 {% import "ui.j2.html" as ui with context %}
 
-{% macro includeJs() -%}
     {{- helpers.includeJQuery() | clear }}
     {{- helpers.includeJs("etherpad.js") | clear }}
     {{- helpers.includeJs("jquery.placeholder.js") | clear }}
     {{- helpers.includeJs("json2.js") | clear }}
     {{- helpers.includeJs("modals.js") | clear }}
     {{- helpers.includeJs("pad_modals.js") | clear }}
-{%- endmacro %}
 
-{% macro includeCss() -%}
     {{- helpers.addBodyClass(bodyClass) | clear }}
     {{- helpers.includeCss("feedback.less") | clear }}
     {{- helpers.includeCss("page3.less") | clear }}
-{%- endmacro %}
 
-{% block headExtra %}
    {{- helpers.addToHead("<meta content='hackpad.com' name='title' />")  }}
    {{- helpers.addToHead("<meta content='Real-time collaborative wiki' " +
       "name='description' />") }}
    {{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' " +
       "rel='image_src' />") }}
-{%- endmacro %}
 
-{% macro body() -%}
   {{ header.topbar() }}
-
   <div id="padpage">
     <div id="padeditor">
         {% block contentArea %}
         {% endblock %}
     </div>
-    {% block padSidebar %}
-    {% endblock %}
+      <aside id="padsidebar">
+        {% block sideBar %}
+        {% endblock %}
+        <div class="clear"></div>
+      </aside>
   </div>
   {% block modals %}
       <!-- template modals in editor_base, so only block ... -->
   {% endblock %}
-  {% block padBottom %}
-  {% endblock %}
-{% endmacro %}
-
-{% block padSidebar %}
-  <aside id="padsidebar">
-    {% block sideBar %}
-    {% endblock %}
-    <div class="clear"></div>
-  </aside>
-{% endblock %}
-
-{% block padBottom %}
-<% template.define('padBottom', function() { var ejs_data=''; %>
+　<!-- padBottom begin -->
   {{- footer.footer()  }}
   {{- signout.signedOutDialog() }}
   {{ ui.button({'id': 'tfeedbackbutton', 'type': 'action', 'className': 'iphonehide ipadhide', 'label': _('feedback') }) }}
   {{- feedback.feedbackModal() }}
-{% endblock %}
+  <!-- padBottom end -->

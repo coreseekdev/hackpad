@@ -1,53 +1,45 @@
+{% extends "pad/editor_base.j2.html" %}
 {% import "pad/editor_base.j2.html" as editor_base with context %}
 {% import "_invite_control.j2.html" as invite with context %}
 {% import "pad/_follow.j2.html" as follow with context %}
 {% import "pad/toolbar.j2.html" as toolbar with context %}
 {% import "ui.j2.html" as ui with context %}
 
-<%
-  template.inherit('pad/editor_base.ejs');
-  template.inherit('_invite_control.ejs');
-  template.inherit('pad/_follow.ejs');
-  template.inherit('pad/toolbar.ejs');
-  template.inherit("ui.ejs");
 
-  helpers.addSmartAppBanner();
 
-  helpers.addBodyClass("sitebar");
-  helpers.addBodyClass("hasSitebar");
+  {{- helpers.addSmartAppBanner() }}
+  {{- helpers.addBodyClass("sitebar") }}
+  {{- helpers.addBodyClass("hasSitebar") }}
 
-  helpers.includeJs("pad_chat.js");
-  helpers.includeJs("pad_invitelog.js");
+  {{- helpers.includeJs("pad_chat.js") }}
+  {{- helpers.includeJs("pad_invitelog.js") }}
 
-  if (false && isDogfood()) {
+  <!-- if (false && isDogfood()) {
     if (!request.userAgent.isMobile()) {
       helpers.addBodyClass("hasBanner");
     }
-  }
-%>
+  } -->
+  {% if helpers.isDogfood() %}
+    {{- helpers.addBodyClass("hasBanner") }}
+  {% endif %}
 
-
-<% template.define('editorExtras', function() { var ejs_data=''; %>
+{% block editorExtras %}
   <div id="collections-div" class="sidebar-div">
     <div id="collection-list-div">
-      <%- template.use('button', null, {
-        id: 'add-to-collection',
-        type: 'custom',
-        label: 'add to collection',
-        menu: [
-          { id: 'collection-invite-list-item',
+      {{- ui.button({'id': 'add-to-collection', 'type': 'custom', 'label': _('add to collection'), 'menu': [
+         { id: 'collection-invite-list-item',
             html: '<form id="collection-invite-form">' +
                 helpers.xsrfTokenElement() +
                 '<input type="hidden" name="padId" value="' +
-                encodeURIComponent(localPadId) + '" />' +
+                helpers.encodeURIComponent(localPadId) + '" />' +
                 '<i class="icon-addcollection"></i>' +
                 '<input type="text" id="collection-picker" ' +
                 'placeholder="New or existing collection"/>' +
                 '</form>'
-          }
-        ]
-      }); %>
+         }
+      ] }) -}}
     </div>
+
     <div id="collections-recent-list-wrapper">
       <div id="collections-recent-label" class="sidebartext">
         or choose a recent collection:
@@ -96,23 +88,18 @@
             N_('everyone (external)'), });
       }
     %>
-    <%- template.use('button', null, {
-      id: 'padaccess-menu',
-      type: 'custom',
-      label: '',
-      disabled: true,
-      menu: padaccessMenu
-    }); %>
+    {{- ui.button({'id': 'padaccess-menu', 'type': 'custom', 'disabled': True, 'menu': padaccessMenu }) -}}
     </div>
   </div>
 
-  <% if (helpers.isChatEnabled()) { %>
-    <%- template.use('chat'); %>
-  <% } %>
-<% return ejs_data; }); %>
+  {% if helpers.isChatEnabled() %}
+    {{- chat.chat() }}
+  {% endif %}
+
+{% endblock %}
 
 
-<% template.define('bottomBar', function() { var ejs_data=''; %>
+{% block bottomBar %}
   <div>
     <a id="editor-last-changed" href="/ep/pad/summary/<%= localPadId %>">
       Latest change
@@ -147,10 +134,9 @@
   </script>
 
   <div id="inviteLog-wrapper"><div id="inviteLog"></div></div>
-<% return ejs_data; }); %>
+{% endblock %}
 
-
-<% template.define('editorMoreModals', function() { var ejs_data=''; %>
+{% block editorMoreModals %}
   <%- template.use('editorModalsCommon'); %>
 
   <div id="embedpaddialog" class="modaldialog">
@@ -172,7 +158,7 @@
       <a class="button" href="#" data-click="hidemodal">Close</a>
     </div>
   </div>
-<% return ejs_data; }); %>
+{% endblock %}
 
 
 <% template.define('sideBar', function() { var ejs_data=''; %>

@@ -92,6 +92,10 @@ class JinjaHelper(object):
             self.includeCss('phone.less')
         return s
 
+
+    def includeCometJs(self):
+        return ''
+
     def includeJs(self, js_fname):
         script_link = '<script nonce="'+ cspNonce() +'" type="text/javascript" src="/static/js/%s"></script>' % js_fname
         self.js[js_fname] = script_link
@@ -215,6 +219,7 @@ class JinjaHelper(object):
         return ''
 
     def addBodyClass(self, body_class):
+        print 'addBodyClass', body_class
         if body_class not in self.body_classes:
             self.body_classes.append(body_class)
         return ''
@@ -243,7 +248,7 @@ class JinjaHelper(object):
         return uri
 
     def siteImage(self):
-        return 'siteImage.png'
+        return '/static/img/nophoto.png'
 
 def clear_output(s):
     if s is None:
@@ -274,7 +279,7 @@ env.install_null_translations()
 
 
 @app.route('/')
-def hello_world():
+def pad_list():
     helper = JinjaHelper()
 
     # header
@@ -288,20 +293,202 @@ def hello_world():
         )
         return headerHtml
 
+
+    def getContentHtml():
+        """
+             padSection = 'hidden';
+              } else if  (request.path.indexOf("/public") == 0 && domains.isPrimaryDomainRequest()) {
+                padSection = 'global';
+                // force stream view for /public
+                selectedSection = 'stream';
+              } else if (!getSessionProAccount() && domains.isPublicDomain() ) {
+                padSection = 'public';
+        :return:
+        """
+        """
+            Load Mock Pads
+            TODO: move the code to other file
+        """
+        class Pads(object):
+            def all(self):
+                pads = [
+                    {
+                        'domainId': 1,
+                        'localPadId': 'demo_pad',
+                        'title': 'demo pad title',
+                        'creatorId': 10,
+                        'createdDate': None,
+                        'lastEditorId': 20,
+                        'lastEditedDate': None,
+                        'groupInfos': [
+
+                        ],
+                        'isPinned': False
+                    }
+                ]
+                return pads
+
+        class PadOptions(object):
+            def __init__(self):
+                self.showTaskCount = True
+
+        class ColumnMetaHelper(object):
+
+            def render(self, column_name, pad):
+                if column_name == "taskCount":
+                    return self.renderTaskCount(pad)
+                if column_name == "title":
+                    return self.renderTitle(pad)
+
+            def renderTaskCount(self,pad):
+                info_completed, info_open = 2, 5        # pad.getTaskCounts();
+                percentCompleted = info_completed / (info_completed + info_open)*100
+                if info_open == 0 and info_completed > 0:
+                    s = """<div class="alldone" style="background: #ccc linear-gradient(to right, #3da440 %s%%, #ccc 0%%)" ></div>
+                    <div class="icon-check"></div><span class="task-completed-count">%s/%s</span>
+                    """ % (percentCompleted, info_completed, (info_completed+info_open))
+                    return s
+                if info_open:
+                    s = """<div class="open" style="background: #ccc linear-gradient(to right, #3da440 %s%%, #ccc 0%%)"></div>
+                     <div class="icon-check"></div><span class="task-completed-count">%s/%s</span>
+                    """ % (percentCompleted, info_completed, (info_completed+info_open))
+                    return s
+                return ""
+
+            def renderTitle(self, pad):
+                editors = [
+                    (1, '/static/img/nophoto.png'),
+                    (2, '/static/img/nophoto.png')
+
+                ]
+                sp = '<span>'
+                MAX_USER_PICS = 1
+                for i in range(0, min(len(editors), MAX_USER_PICS)):
+                    sp += '<img src="%s" style="%s">' % ( editors[i][1], "width:24px; height:24px; padding:1px; vertical-align:middle;" )
+                # if has group
+                s = ' - '+ ','.join(["groupA", "groupB"])
+                title = pad.get("title")
+                sp += '<img src="/static/img/dragdots.png" class="dragdots iphonehide"></img><span class="title-link">%s</span><span class="subtitle">%s</span>' \
+                    % (title, s)
+                return sp
+
+        def getPadFirstNLinesHTML(pad, showFirstNLines):
+            s = '\n'.join([
+                '<div class="%s">%s</div>' % ('ace-line longKeep gutter-noauthor', 'afdfsafas'),
+                '<div class="%s">%s</div>' % ('ace-line longKeep gutter-noauthor', 'fdsafdsa'),
+                '<div class="%s">%s</div>' % ('ace-line longKeep gutter-noauthor', 'hello world'),
+            ])
+            return s
+
+        def _renderPadList(helpers, pads, options):
+            c = ''
+            c += '<div id="padtablecontainer">'
+            c += '<div id="padtable" class="streamtable" >'
+
+            for p in pads:
+                picAccountId = p['creatorId'] if options.get('showFirstNLines') else p['lastEditorId']
+                lastEditedDate = p['lastEditedDate']
+                diffHTMLAndAuthors = {'diffHTML': "", 'authorsHTML': ""}
+                """
+                o.push(renderPadStreamItem(p.localPadId, p.title, p.isPinned, lastEditedDate, picAccountId,
+                                           diffHTMLAndAuthors.authorsHTML, diffHTMLAndAuthors.diffHTML, columnMeta,
+                                           opts, p.groupInfos, isMultipleAuthors / * multipleauthors * /));
+                """
+                diffHTML = getPadFirstNLinesHTML(pad, options['showFirstNLines']);
+                c += env.get_template('_stream_entry.j2.html').render(
+                    helpers=helper, request=request, p=p, opts=PadOptions(),
+                    columnMeta = ColumnMetaHelper(),
+                    onOtherDomain=False, isGlobal=True, domain={
+                        "subDomain": "demo"
+                    },
+                    picUrl='/static/img/nophoto.png', diffHTML=diffHTML
+                )
+                pass
+            c += '</div></div>'
+            return c
+
+
+        padSection = "global"
+        bodyClasses = [padSection,]
+        groupInfos = []
+
+        # render padListHTML
+        # padListHtml = _renderPadList(pads, selectedSection, limit, false / * delayLoad * /, opts);
+        # loadpad
+        # Load Raw Pad's data. sample data, mock only.
+        # // var excludePadIds = (request.params.excludePadIds || "").split(",");
+        excludePadIds = ""
+        limit = 40
+        # //  groupId, name, createdDate, creatorId, facebookGroupId, isPublic, domainId, isDeleted
+        opts = {
+            'showFirstNLines': 10,
+            'isGlobal': True
+        }
+
+        pads = Pads().all() # _loadPads(padSection, groupInfos, limit, excludePadIds);
+        padListHtml = _renderPadList(helper, pads, opts)
+
+        print padListHtml
+        data = {
+            'account': {
+                'uid': 10,
+            },
+            'padListHtml': padListHtml
+        }
+        # FIXME: add ipad if on ipad
+        """
+        if (request.userAgent.isIPad()) {
+            bodyClasses.push('ipad');
+        }
+        """
+
+        bodyHtml = env.get_template('pro/pro_home.j2.html').render(
+            helpers=helper, request=request, bodyClass=' '.join(bodyClasses), **data
+        )
+        return bodyHtml
+
     bodyHtml = env.get_template('framed/framedpage.j2.html').render(
         helpers=helper, request=request,
-        headerHtml=getHeaderHtml, contentHtml=''
+        headerHtml=getHeaderHtml, contentHtml=getContentHtml
     )
-    """
-    bodyHtml = env.get_template('pro/pro_home.j2.html').render(
-        helpers=helper, request=request
-    )
-    """
+
     output = env.get_template('html.j2.html').render(
         bodyHtml=bodyHtml, helpers=helper, request=request
     )
     return output
 
+
+@app.route('/pad/<pad_id>')
+def pad(pad_id):
+    helper = JinjaHelper()
+    templateFile = "pad/editor_full.j2.html"
+    """
+      var templateFile;
+      if (request.cache.isDesktopApp) {
+        templateFile = 'pad/editor_desktop.ejs';
+      } else {
+        templateFile = request.cache.isMobileApp || !localPadId ?
+            "pad/editor_ios.ejs" : "pad/editor_full.ejs";
+      }
+    """
+    session = {
+        'proAccount': True
+    }
+    options = {
+        'robotsNoindex': False,
+        'initialTitle': True
+    }
+
+    bodyHtml = env.get_template(templateFile).render(
+        helpers=helper, request=request,
+        session=session, options=options,
+        localPadId=pad_id, isFork=True
+    )
+
+    output = env.get_template('html.j2.html').render(
+        bodyHtml=bodyHtml, helpers=helper, request=request
+    )
+    return output
 
 @app.route('/static/<path:filename>')
 def static_proxy(filename):

@@ -1,6 +1,5 @@
 {% import "ui.j2.html" as ui with context %}
 
-{% macro includeJs() -%}
     {{- helpers.includeJs("imgshrink.js") | clear }}
     {{- helpers.includeJs("ace2/ace_common.js") | clear }}
     {{- helpers.includeJs("ace2/skiplist.js") | clear }}
@@ -32,15 +31,12 @@
     {{- helpers.includeJs("ace2/ace_tables.js") | clear }}
     {{- helpers.includeJs("ace2/ace_authors.js") | clear }}
     {{- helpers.includeJs("ace2/ace_legacy.js") | clear }}
-{%- endmacro %}
 
-{% macro includeCss() -%}
     {{- helpers.includeCss("ace2/editor.less") | clear }}
     {{- helpers.includeCss("ace2/syntax.less") | clear }}
     {{- helpers.includeCss("ace2/inner.less") | clear }}
     {{- helpers.includeCss("jquery.contextMenu2.css") | clear }}
     <style type="text/css" title="dynamicsyntax"></style>
-{%- endmacro %}
 
 {% macro ace() -%}
 <div id="editor" class="syntax notranslate" autocorrect="off" autocomplete="off">
@@ -77,4 +73,5 @@
     {{- ui.button({'id': 'hp-editor-selection-newpad-confirm', 'type': 'custom', 'fontIcon': 'icon-checkMark' }) -}}
     <input id="hp-editor-selection-newpad-title" placeholder="Enter title">
 </div>
+
 {%- endmacro %}
