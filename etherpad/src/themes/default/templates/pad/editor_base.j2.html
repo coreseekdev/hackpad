@@ -6,55 +6,55 @@
 {% import "_invite_control.j2.html" as invite with context %}
 
 {% block editor_helper %}
-  {{- helpers.includeCss("ace2/editor.less") }}
-  {{- helpers.includeCss("ace2/syntax.less") }}
-  {{- helpers.includeCss("ace2/inner.less") }}
-  {{- helpers.includeCss("pad.less") }}
+  {{- helpers.includeCss("ace2/editor.less") | clear }}
+  {{- helpers.includeCss("ace2/syntax.less") | clear }}
+  {{- helpers.includeCss("ace2/inner.less") | clear }}
+  {{- helpers.includeCss("pad.less") | clear }}
 
-  {{- helpers.includeCss("collections.less") }}
-  {{- helpers.includeCss("jquery.autocomplete.less") }}
-  {{- helpers.includeCss("lightbox.less") }}
-  {{- helpers.includeCss("padaccess.less") }}
+  {{- helpers.includeCss("collections.less") | clear }}
+  {{- helpers.includeCss("jquery.autocomplete.less") | clear }}
+  {{- helpers.includeCss("lightbox.less") | clear }}
+  {{- helpers.includeCss("padaccess.less") | clear }}
 
-  {{- helpers.includeCometJs() }}
-  {{- helpers.includeJs("collab_client.js") }}
-  {{- helpers.includeJs("cookies.js") }}
-  {{- helpers.includeJs("customSelect.jquery.js") }}
-  {{- helpers.includeJs("dateutils.js") }}
-  {{- helpers.includeJs("hints.js") }}
-  {{- helpers.includeJs("invite.js") }}
-  {{- helpers.includeJs("jquery.ajaxqueue.js") }}
-  {{- helpers.includeJs("jquery.autocomplete.js") }}
-  {{- helpers.includeJs("jquery.color.js") }}
-  {{- helpers.includeJs("jquery.placeholder.js") }}
-  {{- helpers.includeJs("jquery-ui-1.8.20.custom.min.js") }}
-  {{- helpers.includeJs("jquery.ui.touch-punch.min.js") }}
-  {{- helpers.includeJs("pad_autolink.js") }}
-  {{- helpers.includeJs("pad_collections.js") }}
-  {{- helpers.includeJs("pad_connectionstatus.js") }}
-  {{- helpers.includeJs("pad_demo.js") }}
-  {{- helpers.includeJs("pad_editbar.js") }}
-  {{- helpers.includeJs("pad_editor.js") }}
-  {{- helpers.includeJs("pad_facebook.js") }}
-  {{- helpers.includeJs("pad_guestpolicy.js") }}
-  {{- helpers.includeJs("pad_guestprompt.js") }}
-  {{- helpers.includeJs("pad_notify.js") }}
-  {{- helpers.includeJs("pad_related.js") }}
-  {{- helpers.includeJs("pad_utils.js") }}
-  {{- helpers.includeJs("pad2.js") }}
-  {{- helpers.includeJs("pretty.js") }}
+  {{- helpers.includeCometJs() | clear }}
+  {{- helpers.includeJs("collab_client.js") | clear }}
+  {{- helpers.includeJs("cookies.js") | clear }}
+  {{- helpers.includeJs("customSelect.jquery.js") | clear }}
+  {{- helpers.includeJs("dateutils.js") | clear }}
+  {{- helpers.includeJs("hints.js") | clear }}
+  {{- helpers.includeJs("invite.js") | clear }}
+  {{- helpers.includeJs("jquery.ajaxqueue.js") | clear }}
+  {{- helpers.includeJs("jquery.autocomplete.js") | clear }}
+  {{- helpers.includeJs("jquery.color.js") | clear }}
+  {{- helpers.includeJs("jquery.placeholder.js") | clear }}
+  {{- helpers.includeJs("jquery-ui-1.8.20.custom.min.js") | clear }}
+  {{- helpers.includeJs("jquery.ui.touch-punch.min.js") | clear }}
+  {{- helpers.includeJs("pad_autolink.js") | clear }}
+  {{- helpers.includeJs("pad_collections.js") | clear }}
+  {{- helpers.includeJs("pad_connectionstatus.js") | clear }}
+  {{- helpers.includeJs("pad_demo.js") | clear }}
+  {{- helpers.includeJs("pad_editbar.js") | clear }}
+  {{- helpers.includeJs("pad_editor.js") | clear }}
+<!--  { {- helpers.includeJs("pad_facebook.js") | clear }} -->
+  {{- helpers.includeJs("pad_guestpolicy.js") | clear }}
+  {{- helpers.includeJs("pad_guestprompt.js") | clear }}
+  {{- helpers.includeJs("pad_notify.js") | clear }}
+  {{- helpers.includeJs("pad_related.js") | clear }}
+  {{- helpers.includeJs("pad_utils.js") | clear }}
+  {{- helpers.includeJs("pad2.js") | clear }}
+  {{- helpers.includeJs("pretty.js") | clear }}
 
-  {{- helpers.setBodyId("padbody") }}
-  {{- helpers.setHtmlTitle(pageTitle) }}
+  {{- helpers.setBodyId("padbody") | clear }}
+  {{- helpers.setHtmlTitle(pageTitle) | clear }}
   {# // tell googlebot to request ?_escaped_fragment_=  #}
   {% if request.args.get('_escaped_fragment_') %}
-    {{- helpers.setNoJs(true) }}
+    {{- helpers.setNoJs(true)  | clear }}
   {% else %}
-    {{- helpers.addToHead('<meta name="fragment" content="!" />') }}
+    {{- helpers.addToHead('<meta name="fragment" content="!" />')  | clear }}
   {% endif %}
 
   {% if options.get('robotsNoindex') %}
-    {{- helpers.addToHead('<meta name="robots" content="noindex, noarchive" />') }}
+    {{- helpers.addToHead('<meta name="robots" content="noindex, noarchive" />') | clear }}
   {% endif %}
 
   {% if options.get('initialTitle') %}

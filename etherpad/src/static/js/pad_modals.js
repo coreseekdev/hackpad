@@ -144,7 +144,7 @@ var padmodals = (function() {
     },
     initShareBox: function() {
       $("#nootherusers a").click(self.showShareBox);
-      $("#sharebutton").click(padfacebook.publishPad);
+      // $("#sharebutton").click(padfacebook.publishPad); //disable facebook-sharing
         /*
       $("#sharebox-hide").click(function() {
         self.hideModal();

@@ -7,12 +7,12 @@
 
 {% block editor_helper %}
   {{- helpers.includeJs("common.js") | clear }}
-  {{- helpers.addSmartAppBanner() }}
-  {{- helpers.addBodyClass("sitebar") }}
-  {{- helpers.addBodyClass("hasSitebar") }}
+  {{- helpers.addSmartAppBanner() | clear }}
+  {{- helpers.addBodyClass("sitebar")| clear  }}
+  {{- helpers.addBodyClass("hasSitebar")| clear  }}
 
-  {{- helpers.includeJs("pad_chat.js") }}
-  {{- helpers.includeJs("pad_invitelog.js") }}
+  {{- helpers.includeJs("pad_chat.js")| clear  }}
+  {{- helpers.includeJs("pad_invitelog.js")| clear  }}
 
   <!-- if (false && isDogfood()) {
     if (!request.userAgent.isMobile()) {
@@ -28,7 +28,7 @@
   </script>
 
   {% if helpers.isDogfood() %}
-    {{- helpers.addBodyClass("hasBanner") }}
+    {{- helpers.addBodyClass("hasBanner")| clear  }}
   {% endif %}
   {{ super() }}
 {% endblock %}
