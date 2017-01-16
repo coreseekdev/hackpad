@@ -5,8 +5,8 @@
 {% import "pad/toolbar.j2.html" as toolbar with context %}
 {% import "ui.j2.html" as ui with context %}
 
-
-
+{% block editor_helper %}
+  {{- helpers.includeJs("common.js") | clear }}
   {{- helpers.addSmartAppBanner() }}
   {{- helpers.addBodyClass("sitebar") }}
   {{- helpers.addBodyClass("hasSitebar") }}
@@ -19,9 +19,19 @@
       helpers.addBodyClass("hasBanner");
     }
   } -->
+  <script>
+    // monkey patch of ua (in comet js) , remove it later
+    var clientVars = {
+        userAgent: navigator.userAgent.toLowerCase()
+    };
+
+  </script>
+
   {% if helpers.isDogfood() %}
     {{- helpers.addBodyClass("hasBanner") }}
   {% endif %}
+  {{ super() }}
+{% endblock %}
 
 {% block editorExtras %}
   <div id="collections-div" class="sidebar-div">
@@ -51,6 +61,7 @@
 
   <div id="shared-with-settings">
     <div id="shared-with-settings-inner">
+    <!-- FIXME: add pad access menu.
     <%
       var padaccessMenu = [{ id: 'padaccess-deny',
           html: '<i class="icon-lock"></i>' + N_('invitees only'), }];
@@ -88,6 +99,7 @@
             N_('everyone (external)'), });
       }
     %>
+    -->
     {{- ui.button({'id': 'padaccess-menu', 'type': 'custom', 'disabled': True, 'menu': padaccessMenu }) -}}
     </div>
   </div>
@@ -137,8 +149,7 @@
 {% endblock %}
 
 {% block editorMoreModals %}
-  <%- template.use('editorModalsCommon'); %>
-
+  {{- editor_base.editorModalsCommon()  }}
   <div id="embedpaddialog" class="modaldialog">
    <h1>Embed This Pad</h1>
    <div class="modaldialog-inner">
@@ -160,19 +171,11 @@
   </div>
 {% endblock %}
 
-
-<% template.define('sideBar', function() { var ejs_data=''; %>
-  <%- template.use('editorSidebarCommon'); %>
-
-  <div id="related-pads-div" class="sidebar-div">
+{% block sideBar %}
+   {{- editor_base.editorSidebarCommon()  }}
+   <div id="related-pads-div" class="sidebar-div">
     <div class="sidebarheading">
-      <%- template.use('button', null, {
-        id: 'related-pads-menu',
-        type: 'custom',
-        label: 'Related Pads',
-        className: 'hp-ui-button-menu-reverse',
-        menu: [{}]
-      }); %>
+      {{- ui.button({'id': 'related-pads-menu', 'type': 'custom', 'className': 'hp-ui-button-menu-reverse', 'label': _('Related Pads'), 'menu':  [{}] }) -}}
     </div>
   </div>
-<% return ejs_data; }); %>
+{% endblock %}

@@ -70,6 +70,7 @@ class JinjaHelper(object):
         self.head_meta = OrderedDict()
         self.body_classes = []
         self.config = config
+        self.body_id = 'body_id'
 
     def includeJQuery(self, force=False):
         if not force and 'jq' in self.js:
@@ -131,10 +132,15 @@ class JinjaHelper(object):
         return '/'
 
     def bodyId(self):
-        return 'body_id'
+        return self.body_id
+
+    def setBodyId(self, body_id):
+        self.body_id = body_id
 
     def bodyClasses(self):
-        return ' '.join(self.body_classes)
+        if self.body_classes:
+            return ' '.join(self.body_classes)
+        return ''
 
     def addToHead(self, head_s):
         print 'add header', head_s
@@ -176,11 +182,21 @@ class JinjaHelper(object):
         return '/cdn'
 
     def clientVarsScript(self):
-        x = '''{"experiment":"homepage-v3","xsrf":"e5298ce5519fdaef","isDogfood":true,"cdn":""}'''
+        import json
+        x = {
+            "experiment": "homepage-v3",
+            "xsrf": "e5298ce5519fdaef",
+            "isDogfood": True,
+            "cdn": "",
+            "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/55.0.2883.87 Chrome/55.0.2883.87 Safari/537.36",
+            "userId": "1",
+
+        }
+
         return '\n'.join([
             '<script type="text/javascript" nonce="' + cspNonce() + '">',
             '  // <![CDATA[',
-            'var clientVars = ' + x + ';',
+            'var clientVars = ' + json.dumps(x) + ';',
             '  // ]]>',
             '</script>'
         ])
@@ -215,7 +231,7 @@ class JinjaHelper(object):
     def suppressGA(self):
         return ''
 
-    def setHtmlTitle(self):
+    def setHtmlTitle(self, title):
         return ''
 
     def addBodyClass(self, body_class):
@@ -249,6 +265,13 @@ class JinjaHelper(object):
 
     def siteImage(self):
         return '/static/img/nophoto.png'
+
+    def isChatEnabled(self):
+        return True
+
+    def escapeHtml(self, s):
+        import html
+        return html.escape(s, quote=True)
 
 def clear_output(s):
     if s is None:
@@ -481,12 +504,15 @@ def pad(pad_id):
 
     bodyHtml = env.get_template(templateFile).render(
         helpers=helper, request=request,
+        bodyClass="", editor_mode = True,
         session=session, options=options,
-        localPadId=pad_id, isFork=True
+        localPadId=pad_id, isFork=False,
+        initialTitle="pad init title"
     )
+    # return bodyHtml
 
     output = env.get_template('html.j2.html').render(
-        bodyHtml=bodyHtml, helpers=helper, request=request
+        bodyHtml=bodyHtml, helpers=helper, request=request,
     )
     return output
 

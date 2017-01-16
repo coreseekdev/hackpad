@@ -20,6 +20,8 @@
       "name='description' />") }}
    {{- helpers.addToHead("<link href='/static/img/hackpad-logo.png' " +
       "rel='image_src' />") }}
+   {% block editor_helper %}
+   {% endblock %}
 
   {{ header.topbar() }}
   <div id="padpage">

@@ -3,7 +3,9 @@
 {% import "ace.j2.html" as ace with context %}
 {% import "chat.j2.html" as chat with context %}
 {% import "pad/pad_userlist.j2.html" as pad_userlist with context %}
+{% import "_invite_control.j2.html" as invite with context %}
 
+{% block editor_helper %}
   {{- helpers.includeCss("ace2/editor.less") }}
   {{- helpers.includeCss("ace2/syntax.less") }}
   {{- helpers.includeCss("ace2/inner.less") }}
@@ -62,20 +64,19 @@
     {# - helpers.addToHead('<link rel="canonical" href="/' +
         initialTitle.replace(/[^\w\s-\.]/g, '').replace(/[\s-]+/g, '-') + '-' +
         encodeURIComponent(localPadId) + '">') #}
-  }
+  {% endif %}
+{% endblock %}
 
-
-<% template.define('contentArea', function() { var ejs_data=''; %>
-  <%- template.use('freakoutScript'); %>
-  <%- template.use('editor'); %>
-  {% block editorExtras %}
-  {% endblock %}
-  <div id="editorbottombox">
-    {% block bottomBar %}
+{% block contentArea %}
+    {{- freakoutScript() }}
+    {{- editor()  }}
+    {% block editorExtras %}
     {% endblock %}
-  </div>
-<% return ejs_data; }); %>
-
+    <div id="editorbottombox">
+        {% block bottomBar %}
+        {% endblock %}
+    </div>
+{% endblock %}
 
 {% macro editor() -%}
   {% if isFork %}
@@ -94,14 +95,13 @@
 {% macro editorSidebarCommon() -%}
   <div id="padusers" class="">
     <div id="sharingsettings">
-      <%- template.use('inviteControl', null, "",
-          "invite people to this pad", "padId", localPadId) %>
+      {{-invite.inviteControl("invite people to this pad", "padId", localPadId)  }}
       <div id="sharesummarywrapper" style="display: none">
         <span class="sharesummary-with">With </span>
         <span id="sharesummary" data-tooltip="Show list"
             data-altTooltip="Hide List"> </span>
       </div>
-      <%- template.use('userlist') %>
+      {{- pad_userlist.userlist()  }}
       <div id="guestprompts"><!-- --></div>
     </div>
   </div>
@@ -306,7 +306,7 @@
     {% endblock %}
   </div>
 
-  {% if (request.args.get('djs') %}
+  {% if request.args.get('djs') %}
     <div id="djs"><!-- --></div>
   {% endif %}
 
