@@ -26,19 +26,19 @@ LibrePad is at very early stage, most of the features are misfunctional.
 In HackPad, they used ejs template system, all the html building blocks make a mess and used a strange JVM based JS engine.
 In LibrePad, I use Jinja2 as the template Engine, and a simple python web framework, Flask as the backend.
 
-[X] Welcome Page
-[X] List Pads Page
-[X] Pad Editor (/pad/<pad_name>)
+- [X] Welcome Page
+- [X] List Pads Page
+- [X] Pad Editor (/pad/<pad_name>)
 
 # TODO
 
-[ ] Change the Jinja2 template into React
-[ ] Adopt modern node.js building system, Gulp, Grunt, etc
-[ ] Support Full Hackpad's API / URL Routing
-[ ] Upgrade ACE to the lastest version
-[ ] Add the Comet back ( Websockets, whatever)
+- [ ] Change the Jinja2 template into React
+- [ ] Adopt modern node.js building system, Gulp, Grunt, etc
+- [ ] Support Full Hackpad's API / URL Routing
+- [ ] Upgrade ACE to the lastest version
+- [ ] Add the Comet back ( Websockets, whatever)
 
 
 # NOTICE
 
-I do NOT want to involve any database into backend, use plain text instead.
+I do NOT want to involve any database dependency into the backend, store data in plain text format instead.
